@@ -1,0 +1,126 @@
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form" action="{:url()}" method="post" id="editForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">来访人:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="name" lay-verify="required"  placeholder="请填写证明人" class="layui-input field-name">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">性别:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="radio" class="field-sex" name="sex" value="1" title="男" checked>
+                        <input type="radio" class="field-sex" name="sex" value="0" title="女">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">居住地址:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="address" lay-verify="required" placeholder="请填写居住地址" class="layui-input field-address">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">联系电话:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="phone" lay-verify="required" placeholder="请填写联系电话" class="layui-input field-phone">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">来访时间:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="call_time" lay-verify="required"   placeholder="" class="layui-input field-call_time" id="call_time" >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">来电主要内容:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <textarea name="call_content" lay-verify="required" placeholder="请填写来电内容"  class="layui-textarea field-call_content"></textarea>
+
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">办理结果:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <textarea name="back_content"  placeholder="请填写办理结果"  class="layui-textarea field-back_content"></textarea>
+
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="other"  placeholder="请填写备注" class="layui-input field-other">
+                    </div>
+                </div>
+
+
+                <div class="layui-card">
+                    <div class="layui-card-header">图片上传</div>
+                    <div class="layui-card-body">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="upload_images">点击上传</button>
+                            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                                预览图：
+                                <div class="layui-upload-list" id="upload-more-list"></div>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+                {if (request()->action() == 'add')}
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        {:token()}
+                    </div>
+                </div>
+                <div class="pop-bottom-bar hisi-footer">
+                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="formSubmit" hisi-data="{pop: true, refresh: true}">提交保存</button>
+                    <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10">返回</a>
+                </div>
+                {else /}
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        {:token()}
+                    </div>
+                    <input type="hidden" class="field-id" name="id">
+                </div>
+                <div class="pop-bottom-bar hisi-footer">
+                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="formSubmit" hisi-data="{pop: true, refresh: true}">提交修改</button>
+                    <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10">返回</a>
+                </div>
+                {/if}
+            </form>
+        </div>
+    </div>
+</div>
+{include file="system@block/layui" /}
+<script>
+    var formData = {:json_encode($formData)};
+    layui.use(['form', 'func','upload','laydate'], function() {
+        var $ = layui.jquery,
+            form = layui.form ,
+            laydate=layui.laydate,
+            uplaod=layui.upload;
+        layui.func.assign(formData);
+
+        uplaod.render({
+            elem: '#upload_images',
+            url:"aa"
+            ,multiple: true
+            ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#upload-more-list').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
+                    });
+                }
+            ,done: function(res){
+                    //上传完毕
+                }
+                });
+
+        laydate.render({
+            elem:'#call_time'
+            ,type:'datetime'
+        })
+    });
+</script>

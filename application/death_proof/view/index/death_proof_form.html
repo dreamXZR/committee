@@ -1,0 +1,156 @@
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form" action="{:url()}" method="post" id="editForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">姓名:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="name" lay-verify="required"  placeholder="请填写人员姓名" class="layui-input field-name">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">身份证号:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="id_number" lay-verify="required"   placeholder="请填写身份证号" class="layui-input field-id_number">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">户籍地址:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="residence_address" lay-verify="required" placeholder="请填写户籍地址" class="layui-input field-residence_address">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">现居住地址:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="present_address" lay-verify="required" placeholder="请填写居住地址" class="layui-input field-present_address">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">死亡时间:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="death_date" lay-verify="required" placeholder="请填写死亡时间" class="layui-input field-death_date" id="death_date">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">死亡地点:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="death_address" lay-verify="required" placeholder="请填写死亡地点" class="layui-input field-death_address">
+                    </div>
+                </div>
+                <hr>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">申请人:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="applicant" lay-verify="required"  placeholder="" class="layui-input field-applicant">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">申请人身份证:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="applicant_id_number" lay-verify="required"  placeholder="" class="layui-input field-applicant_id_number">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">与死者关系:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="radio" class="field-applicant_death_relation" name="applicant_death_relation" value="1" title="配偶" checked>
+                        <input type="radio" class="field-applicant_death_relation" name="applicant_death_relation" value="2" title="子女">
+                        <input type="radio" class="field-applicant_death_relation" name="applicant_death_relation" value="3" title="父母">
+                    </div>
+                </div>
+                <hr>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">委托人:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="agent"  placeholder="" class="layui-input field-agent">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">委托人身份证:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="agent_id_numnber"  placeholder="" class="layui-input field-agent_id_numnber">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">与申请人关系:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="agent_applicant_relation"  placeholder="" class="layui-input field-agent_application_relation">
+                    </div>
+                </div>
+                <hr>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">其它:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" name="other"  placeholder="" class="layui-input field-other">
+                    </div>
+                </div>
+                <div class="layui-card">
+                    <div class="layui-card-header">图片上传</div>
+                    <div class="layui-card-body">
+                        <div class="layui-upload">
+                            <button type="button" class="layui-btn" id="upload_images">点击上传</button>
+                            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                                预览图：
+                                <div class="layui-upload-list" id="upload-more-list"></div>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+                {if (request()->action() == 'add')}
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        {:token()}
+                    </div>
+                </div>
+                <div class="pop-bottom-bar hisi-footer">
+                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="formSubmit" hisi-data="{pop: true, refresh: true}">提交保存</button>
+                    <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10">返回</a>
+                </div>
+                {else /}
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        {:token()}
+                    </div>
+                    <input type="hidden" class="field-id" name="id">
+                </div>
+                <div class="pop-bottom-bar hisi-footer">
+                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="formSubmit" hisi-data="{pop: true, refresh: true}">提交修改</button>
+                    <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10">返回</a>
+                </div>
+                {/if}
+            </form>
+        </div>
+    </div>
+</div>
+{include file="system@block/layui" /}
+<script>
+    var formData = {:json_encode($formData)};
+    layui.use(['form', 'func','upload','laydate'], function() {
+        var $ = layui.jquery,
+            form = layui.form ,
+            uplaod=layui.upload
+            laydata=layui.laydate;
+        layui.func.assign(formData);
+
+        //图片上传
+        uplaod.render({
+            elem: '#upload_images',
+            url:"aa"
+            ,multiple: true
+            ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#upload-more-list').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
+                    });
+                }
+            ,done: function(res){
+                    //上传完毕
+                }
+                });
+        laydata.render({
+            elem:"#death_date"
+        })
+
+    });
+</script>
