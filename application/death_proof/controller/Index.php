@@ -66,7 +66,7 @@ class Index extends Admin
             return $this->success('证明信添加成功','index/index');
 
         }
-
+        $this->assign('upload_url',url('image/upload','folder=deathProof'));
         return $this->fetch('death_proof_form');
     }
 

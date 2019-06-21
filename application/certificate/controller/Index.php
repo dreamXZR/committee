@@ -3,7 +3,8 @@
 namespace app\certificate\controller;
 
 use app\system\controller\Admin;
-use app\certificate\model\VisitorRegister;
+use app\certificate\model\Certificate;
+use app\common\controller\SystemUpload;
 
 /**
  * 证明信控制器
@@ -11,6 +12,8 @@ use app\certificate\model\VisitorRegister;
  */
 class Index extends Admin
 {
+
+
     /**
      * 证明信首页
      * @return string
@@ -23,8 +26,8 @@ class Index extends Admin
             $page       = $this->request->param('page/d', 1);
             $limit      = $this->request->param('limit/d', 15);
 
-            $data['data']=VisitorRegister::where($where)->page($page)->limit($limit)->select();
-            $data['count']=VisitorRegister::where($where)->count('*');
+            $data['data']=Certificate::where($where)->page($page)->limit($limit)->select();
+            $data['count']=Certificate::where($where)->count('*');
             $data['code']=0;
             $data['message']='';
 
@@ -52,16 +55,17 @@ class Index extends Admin
 
             //数据完成
             $data['charge_name']=constant('ADMIN_NICK');  //负责人
-            $data['images']='';
-            $data['number']=VisitorRegister::getNumber();
+            $data['images']=$data['image_path'];
+            $data['number']=Certificate::getNumber();
 
-            if(!VisitorRegister::create($data)){
+            if(!Certificate::create($data)){
                 return $this->error('证明信添加失败');
             }
 
             return $this->success('证明信添加成功','index/index');
 
         }
+        $this->assign('upload_url',url('image/upload','folder=certificate'));
         return $this->fetch('certificate_form');
     }
 
@@ -72,7 +76,7 @@ class Index extends Admin
     public function del()
     {
         $ids = $this->request->param('id/a');
-        $certificate=new VisitorRegister;
+        $certificate=new Certificate;
         if($certificate->del($ids)){
             $this->success('删除成功');
         }else{
@@ -90,14 +94,21 @@ class Index extends Admin
             //提交数据
             $data = $this->request->post();
 
+            if(!$certificate=Certificate::find($data['id'])){
+                return $this->error('该数据不存在');
+            }
+
             //验证
             $result = $this->validate($data,'Certificate');
             if($result !== true){
                 return $this->error($result);
             }
 
+            //图片数据
+            $data['images']=SystemUpload::getUpdateJson($data['image_path'] ?? [],$certificate);
+
             //信息修改
-            if (!VisitorRegister::update($data)) {
+            if (!Certificate::update($data)) {
                 return $this->error('修改失败');
             }
             return $this->success('修改成功');
@@ -105,9 +116,23 @@ class Index extends Admin
 
         $id = $this->request->param('id/d');
 
-        $formData=VisitorRegister::find($id)->toArray();
-        $this->assign('formData',$formData);
+        $formData=Certificate::find($id)->toArray();
 
+        $this->assign('formData',$formData);
+        $this->assign('upload_url',url('image/upload','folder=certificate'));
+        $this->assign('image_url',url('image/index','id='.$formData['id']));
         return $this->fetch('certificate_form');
+    }
+
+    /**
+     * 数据筛选
+     * @return string
+     */
+    public function select()
+    {
+        if($this->request->isPost()){
+
+        }
+        return $this->fetch();
     }
 }

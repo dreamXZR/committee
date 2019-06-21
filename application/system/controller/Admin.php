@@ -6,7 +6,6 @@ use app\system\model\SystemMenu as MenuModel;
 use app\system\model\SystemRole as RoleModel;
 use app\system\model\SystemUser as UserModel;
 use app\system\model\SystemLog as LogModel;
-use app\system\model\SystemLanguage as LangModel;
 use think\Db;
 
 /**
@@ -540,7 +539,6 @@ class Admin extends Common
 
     /**
      * [通用方法]排序
-     * @author 橘子俊 <364666827@qq.com>
      * @return mixed
      */
     public function sort()
@@ -605,18 +603,6 @@ class Admin extends Common
         return $this->success('排序设置成功');
     }
 
-    /**
-     * [通用方法]上传附件
-     * @author 橘子俊 <364666827@qq.com>
-     * @return mixed
-     */
-    public function upload()
-    {
 
-        $model = new \app\common\model\SystemAnnex;
-        
-        return json($model::fileUpload());
-
-    }
 
 }

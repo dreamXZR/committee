@@ -85,17 +85,13 @@
                         <input type="text" name="other"  placeholder="" class="layui-input field-other">
                     </div>
                 </div>
-                <div class="layui-card">
-                    <div class="layui-card-header">图片上传</div>
-                    <div class="layui-card-body">
-                        <div class="layui-upload">
-                            <button type="button" class="layui-btn" id="upload_images">点击上传</button>
-                            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
-                                预览图：
-                                <div class="layui-upload-list" id="upload-more-list"></div>
-                            </blockquote>
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">图片上传:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input class="file form-control"  placeholder="" name="image"  type="file"  id="img" multiple>
                     </div>
+                </div>
+                <div class="col-sm-6" id="image_paths">
                 </div>
                 {if (request()->action() == 'add')}
                 <div class="layui-form-item">
@@ -133,24 +129,30 @@
             laydata=layui.laydate;
         layui.func.assign(formData);
 
-        //图片上传
-        uplaod.render({
-            elem: '#upload_images',
-            url:"aa"
-            ,multiple: true
-            ,before: function(obj){
-                    //预读本地文件示例，不支持ie8
-                    obj.preview(function(index, file, result){
-                        $('#upload-more-list').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
-                    });
-                }
-            ,done: function(res){
-                    //上传完毕
-                }
-                });
+
         laydata.render({
             elem:"#death_date"
         })
 
     });
+</script>
+
+{include file="system@block/fileinput" /}
+<script>
+    var upload_url="{$upload_url}";
+
+    {if (request()->action() == 'add')}
+    init_multiple('img',[],[],upload_url);
+    {else/}
+        var image_url="{$image_url}";
+        get_images('img',image_url,upload_url);
+        {/if}
+
+            $('#img').on("fileuploaded",function(event, data, previewId, index){
+                var path=data.response.path;
+                var html_str='<input name="image_path[]"  type="hidden" value="'+path+'">';
+                $("#image_paths").append(html_str);
+
+
+            });
 </script>

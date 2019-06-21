@@ -80,16 +80,6 @@ if (!function_exists('is_email')) {
     }
 }
 
-if (!function_exists('is_mobile')) {
-    /**
-     * 判断手机号
-     * @param string $num 要验证的手机号
-     * @return bool
-     */
-    function is_mobile($num) {
-        return preg_match("/^1(3|4|5|6|7|8|9)\d{9}$/", $num);
-    }
-}
 
 if (!function_exists('cur_url')) {
     /**
@@ -147,15 +137,7 @@ if (!function_exists('random')) {
     }
 }
 
-if (!function_exists('order_number')) {
-    /**
-     * 生成订单号(年月日时分秒+5位随机数)
-     * @return int
-     */
-    function order_number() {
-        return date('YmdHis').random(5);
-    }
-}
+
 
 if (!function_exists('hide_str')) {
     /**
@@ -827,3 +809,28 @@ if (!function_exists('plugins_url')) {
 // +----------------------------------------------------------------------
 // | 插件相关函数 end
 // +----------------------------------------------------------------------
+if(!function_exists('delete_file')){
+    function delete_file($file_path)
+    {
+        $file_path='upload/'.$file_path;
+        if(file_exists($file_path)){
+            @unlink($file_path);
+        }
+    }
+}
+
+if(!function_exists('json_merge')){
+    function json_merge($json1,$json2)
+    {
+        $arr1=[];
+        $arr2=[];
+
+        if($json1){
+            $arr1=array_filter(json_decode($json1,true));
+        }
+        if($json2){
+            $arr2=array_filter(json_decode($json2,true));
+        }
+        return json_encode(array_merge($arr1,$arr2));
+    }
+}

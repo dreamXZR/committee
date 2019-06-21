@@ -1,13 +1,4 @@
 <?php
-// +----------------------------------------------------------------------
-// | HisiPHP框架[基于ThinkPHP5.1开发]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016-2021 http://www.HisiPHP.com
-// +----------------------------------------------------------------------
-// | HisiPHP提供个人非商业用途免费使用，商业需授权。
-// +----------------------------------------------------------------------
-// | Author: 橘子俊 <364666827@qq.com>，开发者QQ群：50304283
-// +----------------------------------------------------------------------
 
 namespace app\common\behavior;
 
@@ -16,7 +7,6 @@ use app\system\model\SystemModule as ModuleModel;
 use app\system\model\SystemPlugins as PluginsModel;
 use Env;
 use Request;
-use Lang;
 use View;
 /**
  * 初始化基础配置行为
@@ -89,10 +79,7 @@ class Base
             '__CSS__'           => $rootDir.'theme/'.$module.'/'.$theme.'/static/css',
             '__JS__'            => $rootDir.'theme/'.$module.'/'.$theme.'/static/js',
             '__IMG__'           => $rootDir.'theme/'.$module.'/'.$theme.'/static/image',
-            // WAP前台模块静态目录
-            '__WAP_CSS__'       => $rootDir.'theme/'.$module.'/'.$theme.'/wap/static/css',
-            '__WAP_JS__'        => $rootDir.'theme/'.$module.'/'.$theme.'/wap/static/js',
-            '__WAP_IMG__'       => $rootDir.'theme/'.$module.'/'.$theme.'/wap/static/image',
+
         ];
 
         if (isset($_GET['_p'])) {
@@ -112,16 +99,7 @@ class Base
             exit;
         }
 
-        // 设置后台默认语言到cookie
-        if (isset($_GET['lang']) && !empty($_GET['lang'])) {
-            cookie('admin_language', $_GET['lang']);
-        } elseif (cookie('admin_language')) {
-            Lang::range(cookie('admin_language'));
-        } else {
-            cookie('admin_language', config('default_lang'));
-        }
 
-    }
-        define('HISI_LANG', Lang::range());
+        }
     }
 }

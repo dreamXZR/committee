@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="__PUBLIC_JS__/fileinput/bootstrap.min.css">
+<link rel="stylesheet" href="__PUBLIC_JS__/fileinput/fileinput.min.css">
+<script src="__PUBLIC_JS__/jquery.2.1.4.min.js"></script>
+<script src="__PUBLIC_JS__/bootstrap.min.js"></script>
+<script src="__PUBLIC_JS__/fileinput/fileinput.min.js"></script>
+<script src="__PUBLIC_JS__/fileinput/zh.js"></script>
+<script>
+    var ext_arr="{:config('upload.upload_image_ext')}".split(',');
+    var maxFileSize=parseInt("{:config('upload.upload_image_size')}");
+    var maxFileCount=parseInt("{:config('upload.upload_image_number')}");
+    // 初始化多图上传
+    function init_multiple(id,initialPreview,initialPreviewConfig,upload_url)
+    {
+
+        $('#'+id).fileinput('destroy');
+        $('#'+id).fileinput({
+            language: 'zh',
+            allowedFileExtensions : ext_arr,
+            uploadAsync: true, //默认异步上传
+            showUpload: true, //是否显示上传按钮
+            uploadUrl: upload_url,
+            maxFileCount: maxFileCount,
+            maxFileSize:maxFileSize,
+            initialPreview: initialPreview,
+            showType:'detail',
+            overwriteInitial: false,
+            initialPreviewConfig: initialPreviewConfig,
+            showRemove :false,
+            showClose:false,
+            layoutTemplates:{
+                actionDelete:''
+            }
+
+        });
+    }
+    // 修改初始化多图上传
+    function init_multiple_update(id,initialPreview,initialPreviewConfig,upload_url)
+    {
+
+        $('#'+id).fileinput('destroy');
+        $('#'+id).fileinput({
+            language: 'zh',
+            allowedFileExtensions : ext_arr,
+            uploadAsync: true, //默认异步上传
+            showUpload: true, //是否显示上传按钮
+            uploadUrl: upload_url,
+            maxFileCount: maxFileCount,
+            maxFileSize:maxFileSize,
+            initialPreview: initialPreview,
+            showType:'detail',
+            overwriteInitial: false,
+            initialPreviewConfig: initialPreviewConfig,
+            showRemove :false,
+            showClose:false,
+
+        });
+    }
+    //ajax 获得资源初始化多图
+    function get_images(id,url,upload_url)
+    {
+
+        $.ajax({
+            type:'GET',
+            url:url,
+            success:function(res){
+                if(res){
+
+                    init_multiple_update(id,res.images,res.delete,upload_url);
+                }else{
+                    init_multiple_update(id,[],[],upload_url);
+                }
+
+            }
+        })
+    }
+</script>

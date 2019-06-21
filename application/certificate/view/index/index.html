@@ -1,10 +1,7 @@
 <table id="dataTable"></table>
 
-{include file="system@block/layui" /}
 
-<script type="text/html" id="statusTpl">
-    <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=admin_user&id={{ d.id }}">
-</script>
+
 
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
@@ -13,14 +10,20 @@
 
 <script type="text/html" id="toolbar">
     <div class="layui-btn-group fl">
-        <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-add-circle-fine "  title="添加证明信">&nbsp;添加</a>
+        <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-add-circle-fine" >&nbsp;添加</a>
         <a data-href="{:url('del')}" class="layui-btn layui-btn-primary layui-btn-sm j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
+        <a class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-search" id="select_btn">&nbsp;数据筛选</a>
     </div>
 </script>
 
+{include file="system@block/layui" /}
+{include file="index/select" /}
 <script type="text/javascript">
-    layui.use(['table'], function() {
-        var table = layui.table;
+    layui.use(['table','layer','jquery'], function() {
+        var table = layui.table,
+            layer = layui.layer,
+            $=layui.jquery;
+
         table.render({
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
@@ -41,7 +44,27 @@
                 ,{title: '操作', templet: '#buttonTpl'}
             ]]
         });
+
+        $('#select_btn').click(function () {
+            layer.open({
+                type:1,
+                title:'数据筛选',
+                area:'600px',
+                content:$('#select').html(),
+                btn:['确认', '取消'],
+
+
+            });
+
+        });
+
+
+
+
     });
+
+
+
 </script>
 
 
