@@ -42,7 +42,7 @@ class Certificate extends Model
     public static function getNumber()
     {
         $today=date('Ymd',time());
-        $number=Cache::get('certificate_number');
+        $number=Cache::get('system_number');
         if($number){
             if($number[0]!=$today){
                 $new_number=date('Ymd',time()).'001';
@@ -52,7 +52,30 @@ class Certificate extends Model
         }else{
             $new_number=date('Ymd',time()).'001';
         }
-        Cache::set('certificate_number',[$today,$new_number]);
+        Cache::set('system_number',[$today,$new_number]);
         return $new_number;
+    }
+
+    /**
+     * 条件查询
+     * @param array $where
+     * @param array $request
+     * @return array
+     */
+    public static function whereSql($where=[],$request=[])
+    {
+        if(isset($request['number']) && $request['number']){
+            $where[]=['number','eq',$request['number']];
+        }
+
+        if(isset($request['name']) && $request['name']){
+            $where[]=['name','eq',$request['name']];
+        }
+
+        if(isset($request['charge_name']) && $request['charge_name']){
+            $where[]=['charge_name','eq',$request['charge_name']];
+        }
+
+        return $where;
     }
 }

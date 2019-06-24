@@ -6,7 +6,7 @@
             <div class="layui-tab layui-tab-brief">
                 <ul class="layui-tab-title">
                     <li class="layui-this">
-                        <a href="javascript:;" id="curTitle">{$hisiCurMenu['title']|raw}</a>
+                        <a href="javascript:;" id="curTitle">{$curMenu['title']|raw}</a>
                     </li>
                 </ul>
                 <div class="layui-tab-content page-tab-content">
@@ -47,7 +47,7 @@
                         {php}
                             $tabData['current'] = isset($tabData['current']) ? $tabData['current'] : '';
                         {/php}
-                        {if ($vo['url'] eq $hisiCurMenu['url'] or (url($vo['url']) eq $tabData['current']))}
+                        {if ($vo['url'] eq $curMenu['url'] or (url($vo['url']) eq $tabData['current']))}
                             <li class="layui-this">
                         {else /}
                             <li>

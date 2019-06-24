@@ -79,7 +79,7 @@ class Admin extends Common
                 $this->assign('systemBreadcrumb', $breadCrumbs);
 
                 //获取当前菜单
-                $this->assign('hisiCurMenu',$curMenu);
+                $this->assign('curMenu',$curMenu);
 
                 // 获取当前菜单的顶级节点
                 $this->assign('hisiCurParents', $menuParents);

@@ -13,6 +13,58 @@ return [
     'sort' => 0,
     'childs' => [
       [
+        'title' => '居民信息',
+        'icon' => 'aicon ai-caidan',
+        'module' => 'system',
+        'url' => 'resident/index',
+        'param' => '',
+        'target' => '_self',
+        'debug' => 0,
+        'system' => 0,
+        'nav' => 1,
+        'sort' => 1,
+        'childs' => [
+          [
+            'title' => '信息卡',
+            'icon' => 'typcn typcn-clipboard',
+            'module' => 'system',
+            'url' => 'resident/info/index',
+            'param' => '',
+            'target' => '_self',
+            'debug' => 0,
+            'system' => 0,
+            'nav' => 1,
+            'sort' => 0,
+            'childs' => [
+              [
+                'title' => '添加信息卡',
+                'icon' => 'aicon ai-shezhi',
+                'module' => 'system',
+                'url' => 'resident/info/add',
+                'param' => '',
+                'target' => '_self',
+                'debug' => 0,
+                'system' => 0,
+                'nav' => 0,
+                'sort' => 0,
+              ],
+            ],
+          ],
+          [
+            'title' => '人员列表',
+            'icon' => 'typcn typcn-clipboard',
+            'module' => 'system',
+            'url' => 'resident/member/index',
+            'param' => '',
+            'target' => '_self',
+            'debug' => 0,
+            'system' => 0,
+            'nav' => 1,
+            'sort' => 0,
+          ],
+        ],
+      ],
+      [
         'title' => '来访登记',
         'icon' => 'aicon ai-caidan',
         'module' => 'system',
@@ -22,7 +74,7 @@ return [
         'debug' => 0,
         'system' => 0,
         'nav' => 1,
-        'sort' => 1,
+        'sort' => 2,
         'childs' => [
           [
             'title' => '来访登记管理',
@@ -62,7 +114,7 @@ return [
         'debug' => 0,
         'system' => 0,
         'nav' => 1,
-        'sort' => 2,
+        'sort' => 3,
         'childs' => [
           [
             'title' => '证明信管理',
@@ -126,7 +178,7 @@ return [
         'debug' => 0,
         'system' => 0,
         'nav' => 1,
-        'sort' => 3,
+        'sort' => 4,
         'childs' => [
           [
             'title' => '就业证明管理',
@@ -190,7 +242,7 @@ return [
         'debug' => 0,
         'system' => 0,
         'nav' => 1,
-        'sort' => 4,
+        'sort' => 5,
         'childs' => [
           [
             'title' => '死亡证明管理',

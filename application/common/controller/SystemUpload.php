@@ -65,7 +65,6 @@ class SystemUpload extends Controller
     public function getImageList($obj,$id)
     {
         $array=[];
-
         foreach (\json_decode($obj->images) as $k=>$v){
             if($v){
                 $array['images'][]="<img src='/upload/".$v."' style='height:auto; max-width: 100%; max-height: 100%; margin-top: 0px;'>";

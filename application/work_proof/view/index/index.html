@@ -1,6 +1,6 @@
+{include file="index/select" /}
 <table id="dataTable"></table>
 
-{include file="system@block/layui" /}
 
 <script type="text/html" id="statusTpl">
     <input type="checkbox" name="status" value="{{ d.status }}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" {{ d.status == 1 ? 'checked' : '' }} data-href="{:url('status')}?table=admin_user&id={{ d.id }}">
@@ -15,12 +15,15 @@
     <div class="layui-btn-group fl">
         <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-add-circle-fine "  title="添加证明信">&nbsp;添加</a>
         <a data-href="{:url('del')}" class="layui-btn layui-btn-primary layui-btn-sm j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
+        <a class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-search" id="search_btn">&nbsp;数据筛选</a>
     </div>
 </script>
 
+{include file="system@block/layui" /}
 <script type="text/javascript">
-    layui.use(['table'], function() {
-        var table = layui.table;
+    layui.use(['table','jquery'], function() {
+        var table = layui.table,
+            $=layui.jquery;
         table.render({
             elem: '#dataTable'
             ,url: '{:url()}' //数据接口
@@ -39,6 +42,10 @@
                 ,{field: 'id_number', title: '身份证号'}
                 ,{title: '操作', templet: '#buttonTpl'}
             ]]
+        });
+
+        $('#search_btn').click(function () {
+            $("#search_form").toggle();
         });
     });
 </script>

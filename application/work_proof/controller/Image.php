@@ -1,10 +1,10 @@
 <?php
 
-namespace app\death_proof\controller;
+namespace app\work_proof\controller;
 
 use app\system\controller\Admin;
 use app\common\controller\SystemUpload;
-use app\death_proof\model\DeathProof;
+use app\work_proof\model\WorkProof;
 
 class Image extends Admin
 {
@@ -17,8 +17,8 @@ class Image extends Admin
     {
         $id=request()->param('id/d');
 
-        if($certificate=DeathProof::find($id)){
-            $image_array=$systemUpload->getImageList($certificate,$id);
+        if($workProof=WorkProof::find($id)){
+            $image_array=$systemUpload->getImageList($workProof,$id);
             return json($image_array);
         }
     }
@@ -45,9 +45,9 @@ class Image extends Admin
         $id=request()->param('id/d');
         $key=request()->param('key');
 
-        if($certificate=DeathProof::find($id)) {
+        if($workProof=WorkProof::find($id)) {
 
-            return $systemUpload->deleteImage($certificate,$key);
+            return $systemUpload->deleteImage($workProof,$key);
 
         }
     }

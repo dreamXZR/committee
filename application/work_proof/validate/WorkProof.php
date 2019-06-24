@@ -16,8 +16,8 @@ class WorkProof extends Validate
         'work_content|工作内容'=>'require|max:100',
         'work_place|工作地点'=>'require|max:100',
         'child_name|子女姓名'=>'require|max:100',
-        'child_sex|子女性别'=>['/(^\d(15)$)|((^\d{18}$))|(^\d{17}(\d|X|x)$)/', 'require'],
-        'child_id_number|子女身份证号'=>'require|max:100',
+        'child_sex|子女性别'=>'require',
+        'child_id_number|子女身份证号'=>['/(^\d(15)$)|((^\d{18}$))|(^\d{17}(\d|X|x)$)/', 'require'],
         '__token__'      => 'require|token',
     ];
 

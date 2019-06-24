@@ -35,5 +35,25 @@ class WorkProof extends Model
         return true;
     }
 
+    /**
+     * 条件查询
+     * @param array $where
+     * @param array $request
+     * @return array
+     */
+    public static function whereSql($where=[],$request=[])
+    {
+
+        if(isset($request['name']) && $request['name']){
+            $where[]=['name','eq',$request['name']];
+        }
+
+        if(isset($request['id_number']) && $request['id_number']){
+            $where[]=['id_number','eq',$request['id_number']];
+        }
+
+        return $where;
+    }
+
 
 }

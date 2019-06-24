@@ -23,6 +23,8 @@ class Index extends Admin
             $page       = $this->request->param('page/d', 1);
             $limit      = $this->request->param('limit/d', 15);
 
+            $where=DeathProof::whereSql($where,request()->get());
+
             $data['data']=DeathProof::where($where)->page($page)->limit($limit)->select();
             $data['count']=DeathProof::where($where)->count('*');
             $data['code']=0;
@@ -55,7 +57,7 @@ class Index extends Admin
             }
 
             //数据完成
-            //$data['images']='';
+            $data['images']=$data['image_path'] ?? [];
             $data['number']=DeathProof::getNumber();
 
 
@@ -102,6 +104,8 @@ class Index extends Admin
                 $result = $this->validate($data,'DeathProof');
             }
 
+            $data['images']=$data['image_path'] ?? [];
+
             //信息修改
             if (!DeathProof::update($data)) {
                 return $this->error('修改失败');
@@ -112,8 +116,10 @@ class Index extends Admin
         $id = $this->request->param('id/d');
 
         $formData=DeathProof::find($id)->toArray();
-        $this->assign('formData',$formData);
 
+        $this->assign('formData',$formData);
+        $this->assign('upload_url',url('image/upload','folder=deathProof'));
+        $this->assign('image_url',url('image/index','id='.$formData['id']));
         return $this->fetch('death_proof_form');
     }
 }

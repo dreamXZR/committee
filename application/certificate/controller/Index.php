@@ -26,6 +26,8 @@ class Index extends Admin
             $page       = $this->request->param('page/d', 1);
             $limit      = $this->request->param('limit/d', 15);
 
+            $where=Certificate::whereSql($where,request()->get());
+
             $data['data']=Certificate::where($where)->page($page)->limit($limit)->select();
             $data['count']=Certificate::where($where)->count('*');
             $data['code']=0;
@@ -55,7 +57,7 @@ class Index extends Admin
 
             //数据完成
             $data['charge_name']=constant('ADMIN_NICK');  //负责人
-            $data['images']=$data['image_path'];
+            $data['images']=$data['image_path'] ?? [];
             $data['number']=Certificate::getNumber();
 
             if(!Certificate::create($data)){

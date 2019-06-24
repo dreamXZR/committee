@@ -1,8 +1,5 @@
+{include file="index/select" /}
 <table id="dataTable"></table>
-
-
-
-
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
     <a href="{:url('del')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
@@ -12,14 +9,13 @@
     <div class="layui-btn-group fl">
         <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-add-circle-fine" >&nbsp;添加</a>
         <a data-href="{:url('del')}" class="layui-btn layui-btn-primary layui-btn-sm j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
-        <a class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-search" id="select_btn">&nbsp;数据筛选</a>
+        <a class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-search" id="search_btn">&nbsp;数据筛选</a>
     </div>
 </script>
 
 {include file="system@block/layui" /}
-{include file="index/select" /}
 <script type="text/javascript">
-    layui.use(['table','layer','jquery'], function() {
+    layui.use(['table','jquery'], function() {
         var table = layui.table,
             layer = layui.layer,
             $=layui.jquery;
@@ -45,18 +41,10 @@
             ]]
         });
 
-        $('#select_btn').click(function () {
-            layer.open({
-                type:1,
-                title:'数据筛选',
-                area:'600px',
-                content:$('#select').html(),
-                btn:['确认', '取消'],
-
-
-            });
-
+        $('#search_btn').click(function () {
+            $("#search_form").toggle();
         });
+
 
 
 
