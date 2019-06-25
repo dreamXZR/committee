@@ -1,0 +1,126 @@
+<button type="button" tooltip="新增"  style="display:none;"  data-toggle="modal" data-target="#residentModal" id="bb" data-backdrop="false"></button>
+<div class="modal fade" id="residentModal" >
+    <div class="modal-dialog" style="top: 8%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">居民信息</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">姓名:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" placeholder="请输入姓名(必填)" class="layui-input"  v-model='resident.name'>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">性别:</label>
+                    <div class="layui-input-inline" style="width: 75%;" >
+                        <input type="radio"   v-model='resident.sex' value="男"  lay-ignore>男
+                        <input type="radio"   v-model='resident.sex' value="女"  lay-ignore>女
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">与户主关系:</label>
+                    <div class="layui-input-inline" style="width: 75%;" lay-ignore>
+                        {foreach \app\resident\model\Resident::$relationship_map as $ship}
+                            <input type="radio" name="relationship"  v-model='resident.relationship' value="{$ship}"   @click="relationship_radio('{$ship}')" lay-ignore>{$ship}
+                        {/foreach}
+
+                        <input style="width: 15%; display: inline-block;" type="text" class="layui-input" v-model='resident.other_relationship' :disabled="resident.relationship!='其它'">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">户籍所在地:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" placeholder="请输入户籍(必填)" class="layui-input" v-model='resident.residence_address'>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">身份证号码:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" placeholder="请输入身份证(必填)" class="layui-input" v-model='resident.id_number'>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">手机号:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" placeholder="请输入手机号(必填)" class="layui-input" v-model='resident.phone'>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">民族:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <select  class="form-control"  v-model='resident.nation' lay-ignore>
+                            {foreach $nation as $v }
+                            <option value="{$v->name}">{$v->name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">文化程度:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <select  v-model='resident.culture' class="form-control"  lay-ignore>
+                            {foreach \app\resident\model\Resident::$culture_map as $culture}
+                                <option value="{$culture}">{$culture}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">政治面貌:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <select  v-model='resident.face' class="form-control"  lay-ignore>
+                            {foreach \app\resident\model\Resident::$face_map as $face}
+                                <option value="{$face}">{$face}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">婚姻状况:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <select  v-model='resident.marriage' class="form-control"  lay-ignore>
+                            {foreach \app\resident\model\Resident::$marriage_map as $marriage}
+                                <option value="{$marriage}">{$marriage}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">身份类别:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <select  v-model='resident.identity' class="form-control"  lay-ignore>
+                            {foreach \app\resident\model\Resident::$identity_map as $identity}
+                                <option value="{$identity}">{$identity}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">工作单位及职务:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" placeholder="请输入工作单位及职务" class="layui-input" v-model='resident.unit'>
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <label  class="layui-form-label" style="width: 20%;">备注:</label>
+                    <div class="layui-input-inline" style="width: 75%;">
+                        <input type="text" placeholder="请填写备注" class="layui-input" v-model='resident.other'>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="layui-btn layui-btn-primary" data-dismiss="modal" id="bb_close">关闭</button>
+                <button v-if="resident_status" type="button" class="layui-btn"  @click='add_resident_info'>提交</button>
+                <button  v-if="resident_status===false" type="button" class="layui-btn"  @click='update_resident_info' >修改</button>
+            </div>
+        </div>
+    </div>
+</div>

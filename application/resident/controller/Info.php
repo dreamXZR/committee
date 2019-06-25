@@ -2,6 +2,7 @@
 
 namespace app\resident\controller;
 
+use app\resident\model\Nation;
 use app\system\controller\Admin;
 use app\resident\model\Info as infoModel;
 
@@ -34,7 +35,8 @@ class Info extends Admin
 
     public function add()
     {
-
+        $nation=Nation::all();
+        $this->assign('nation',$nation);
         return $this->fetch('info_form');
     }
 }

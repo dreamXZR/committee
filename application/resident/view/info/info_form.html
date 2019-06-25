@@ -1,0 +1,433 @@
+<style>
+    .news{
+        width: 90%;
+        margin: 0 auto;
+    }
+    .new-tit{
+        position: relative;
+        min-height: 35px;
+        background: #fff;
+        -webkit-box-shadow: 0 0 4px rgba(0,0,0,.3);
+        -moz-box-shadow: 0 0 4px rgba(0,0,0,.3);
+        box-shadow: 0 0 4px rgba(0,0,0,.3);
+        color: #555;
+        padding-left: 12px;
+        line-height: 34px;
+        font-size: 13px;
+    }
+    .new-cnt{
+        background-color: #fbfbfb;
+        -webkit-box-shadow: 1px 0 10px 1px rgba(0,0,0,.3);
+        -moz-box-shadow: 1px 0 10px 1px rgba(0,0,0,.3);
+        box-shadow: 1px 0 10px 1px rgba(0,0,0,.3);
+        padding: 12px;
+
+    }
+    .new-cnt .layui-form {
+        width: 100%!important;
+    }
+
+    .shade{
+        display: none;
+        position:fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+
+</style>
+<div class="layui-form"  id="app">
+
+    <div class="layui-tab-content">
+            <div class="layui-form-item">
+                <label class="layui-form-label">小区名称:</label>
+                <div class="layui-input-inline" style="width: 75%;">
+                    <input type="text" name="housing_estate" lay-verify="required"  placeholder="请填写小区名称(必填)" class="layui-input field-name">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">户籍性质:</label>
+                <div class="layui-input-inline" style="width: 75%;">
+                    <input type="radio" name="resident_status" value="1" title="农业" checked>
+                    <input type="radio" name="resident_status" value="2" title="非农业" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">房屋使用人:</label>
+                <div class="layui-input-inline" style="width: 75%;">
+                    <input type="radio" name="house_people" value="1" title="业主" checked>
+                    <input type="radio" name="house_people" value="2" title="租户" >
+                    <input type="radio" name="house_people" value="3" title="空房" >
+                </div>
+            </div>
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">房屋状态:</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="house_status[write]" lay-skin="primary" title="户在" >
+                    <input type="checkbox" name="house_status[read]" lay-skin="primary" title="户不在">
+                    <input type="checkbox" name="house_status[game]" lay-skin="primary" title="人在" >
+                    <input type="checkbox" name="house_status[write]" lay-skin="primary" title="人不在" >
+
+                </div>
+            </div>
+            <div class="layui-form-item" pane="">
+                <label class="layui-form-label">住户情况:</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="people[1]" lay-skin="primary" title="老人空巢">
+                    <input type="checkbox" name="people[2]" lay-skin="primary" title="独居">
+                    <input type="checkbox" name="people[3]" lay-skin="primary" title="残疾人">
+                    <input type="checkbox" name="people[4]" lay-skin="primary" title="低保户">
+                    <input type="checkbox" name="people[5]" lay-skin="primary" title="特困">
+                    <input type="checkbox" name="people[6]" lay-skin="primary" title="复退">
+                    <input type="checkbox" name="people[7]" lay-skin="primary" title="现役">
+                    <input type="checkbox" name="people[8]" lay-skin="primary" title="侨属">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">家庭状况:</label>
+                <div class="layui-input-inline" style="width: 75%;">
+                    <input type="text" name="housing_estate"   class="layui-input field-name">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注:</label>
+                <div class="layui-input-inline" style="width: 75%;">
+                    <input type="text" name="housing_estate"  class="layui-input field-name">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="news">
+                <div class="new-tit">
+                    居民信息
+                </div>
+                <div class="new-cnt">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" @click="resident_info">+新增</button>
+                    <table class="layui-table">
+                        <thead>
+                            <tr>
+                                <th>姓名</th>
+                                <th>户主关系</th>
+                                <th>民族</th>
+                                <th>政治面貌</th>
+                                <th>身份证号</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for='(item,index) in residents'>
+                                <td>
+                                    {{item.name}}
+                                </td>
+                                <td>
+                                    {{item.relationship}}
+                                </td>
+                                <td>
+                                    {{item.nation}}
+                                </td>
+                                <td>
+                                    {{item.face}}
+                                </td>
+                                <td>
+                                    {{item.id_number}}
+                                </td>
+
+                                <td>
+                                    {{item.other}}
+                                </td>
+                                <td>
+                                    <div class="layui-btn-group">
+                                        <button type="button" class="layui-btn layui-btn-sm" @click="edit_resident_info(index)">
+                                            <i class="layui-icon">&#xe642;</i>
+                                        </button>
+                                        <button type="button" class="layui-btn layui-btn-sm" @click="del_resident_info(index)">
+                                            <i class="layui-icon">&#xe640;</i>
+                                        </button>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="news">
+                <div class="new-tit">
+                    残疾人信息
+                </div>
+                <div class="new-cnt">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" @click="handicapped_info">+新增</button>
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>证号</th>
+                            <th>类别</th>
+                            <th>等级</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for='(item,index) in handicappeds'>
+                            <td>
+                                {{item.name}}
+                            </td>
+                            <td>
+                                {{item.number}}
+                            </td>
+                            <td>
+                                {{item.type}}
+                            </td>
+                            <td>
+                                {{item.level}}
+                            </td>
+
+                            <td>
+                                <div class="layui-btn-group">
+                                    <button type="button" class="layui-btn layui-btn-sm" @click="edit_handicapped_info(index)">
+                                        <i class="layui-icon">&#xe642;</i>
+                                    </button>
+                                    <button type="button" class="layui-btn layui-btn-sm" @click="del_handicapped_info(index)">
+                                        <i class="layui-icon">&#xe640;</i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    <div class="pop-bottom-bar hisi-footer">
+        <button type="submit" class="layui-btn layui-btn-normal" >提交保存</button>
+        <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10">返回</a>
+    </div>
+    <div class="shade">
+        {include file="info/_handicapped" /}
+        {include file="info/_resident" /}
+    </div>
+</div>
+
+
+{include file="system@block/layui" /}
+{include file="system@block/info" /}
+
+
+<script type="text/javascript">
+    var app=new Vue({
+        el:'#app',
+        data:{
+            present_address:'',
+            building:'',
+            door:'',
+            no:'',
+            residence_status:'农业',
+            house_people:'业主',
+            house_status:[],
+            people:[],
+            situation:'',
+            other:'',
+
+            handicappeds:[],
+            handicapped:{},
+            handicapped_status:true,
+            handicapped_index:'',
+            residents:[],
+            resident:{},
+            resident_status:true,
+            resident_index:'',
+        },
+        methods:{
+            handicapped_info:function(){
+                this.handicapped_status=true;
+                this.handicapped={};
+                $('#aa').click();
+                $('.shade').show();
+            },
+            add_handicapped_info:function(){
+                if(this.handicapped_validate(this.handicapped)){
+                    this.handicappeds.push(this.handicapped);
+                    this.handicapped={};
+                    $('#aa_close').click();
+                    $('.shade').hide();
+                }else{
+                    return false;
+                }
+
+            },
+
+            del_handicapped_info:function(index){
+                var that=this;
+                layui.use(['layer'],function () {
+                    var layer=layui.layer;
+                    var layer_index=layer.confirm('是否删除该信息',{
+                                        btn: ['是', '否'],
+                                        yes:function () {
+                                            that.handicappeds.splice(index,1);
+                                            layer.close(layer_index);
+                                        }
+                                    });
+                });
+            },
+
+            edit_handicapped_info:function(index){
+                this.handicapped=JSON.parse(JSON.stringify(this.handicappeds[index]));
+                this.handicapped_status=false;
+                this.handicapped_index=index;
+                $('#aa').click();
+                $('.shade').show();
+            },
+
+            update_handicapped_info:function(){
+                if(this.handicapped_validate(this.handicapped)){
+                    Vue.set(this.handicappeds,this.handicapped_index,this.handicapped);
+                    $('#aa_close').click();
+                    $('.shade').hide();
+                }else{
+                    return false;
+                }
+
+            },
+
+            handicapped_validate:function(data){
+                if(data.name && data.number && data.type && data.level){
+                    return true;
+                }else{
+                    layui.use(['layer'],function () {
+                        var layer=layui.layer;
+                        layer.msg('请填写完整信息');
+                    });
+                    return false;
+                }
+            },
+
+            resident_info:function(){
+                this.resident_status=true;
+                this.resident={};
+                $('#bb').click();
+                $('.shade').show();
+            },
+
+            add_resident_info:function(){
+                //验证
+                if(this.resident_validate(this.resident)){
+                    //获得性别、出生年月
+                    var info=this.id_number_format(this.resident.id_number);
+                    //this.resident.sex=info[0];
+                    this.resident.birthday=info[1];
+
+                    if(this.resident.other_relationship){
+                        this.resident.relationship=this.resident.other_relationship
+                    }
+
+                    this.residents.push(this.resident);
+                    this.resident={}
+                    $('#bb_close').click();
+                    $('.shade').hide();
+                }else{
+                    return false;
+                }
+
+            },
+
+            del_resident_info:function(index){
+                var that=this;
+                layui.use(['layer'],function () {
+                    var layer=layui.layer;
+                    var layer_index=layer.confirm('是否删除该信息',{
+                        btn: ['是', '否'],
+                        yes:function () {
+                            that.residents.splice(index,1);
+                            layer.close(layer_index);
+                        }
+                    });
+                });
+            },
+
+            edit_resident_info:function(index){
+                var edit_json=JSON.parse(JSON.stringify(this.residents[index]));
+
+                edit_json.other_relationship=edit_json.relationship;
+
+                this.resident=edit_json;
+                this.resident_status=false;
+                this.resident_index=index;
+                $('#bb').click();
+                $('.shade').show();
+            },
+
+            update_resident_info:function(){
+                if(this.resident_validate(this.resident)){
+                    var info=this.id_number_format(this.resident.id_number);
+                    //this.resident.sex=info[0];
+                    this.resident.birthday=info[1];
+
+                    if(this.resident.other_relationship){
+                        this.resident.relationship=this.resident.other_relationship
+                    }
+
+                    Vue.set(this.residents,this.resident_index,this.resident);
+                    $('#bb_close').click();
+                    $('.shade').hide();
+                }else{
+                    return false;
+                }
+
+            },
+
+            resident_validate:function(data){
+                var msg='';
+                if(data.name && data.relationship && data.residence_address && data.id_number && data.nation && data.phone && data.sex && data.identity && data.culture && data.face && data.marriage){
+                    var ph= /^[1]([3-9])[0-9]{9}$/;
+                    var mb= /\d{7,8}/;
+                    if(!ph.test(data.phone)&&!mb.test(data.phone)){
+                        msg="手机号码有误，请重填";
+                    }
+                    if(!/^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(data.id_number)){
+                        msg="身份证号有误，请重填";
+                    }
+                }else{
+                    msg='请填写完整信息';
+                }
+                if(msg){
+                    layui.use(['layer'],function () {
+                        var layer=layui.layer;
+                        layer.msg(msg);
+                    });
+                    return false;
+                }
+
+                return true;
+            },
+            //根据身份证号生成性别，出生日期
+            id_number_format:function(idCard){
+                let birthday='';
+                let sex=0;
+
+                if(idCard.length==15){
+                    birthday = "19"+idCard.substr(6,6);
+                    sex=(idCard[14]%2 === 0)?'0':'1';
+                }else{
+                    birthday = idCard.substr(6,8);
+                    sex=(idCard[16]%2 === 0)?'0':'1';
+                }
+                birthday = birthday.replace(/(.{4})(.{2})/,"$1-$2-");
+
+                return [sex,birthday];
+            },
+            relationship_radio:function(select){
+
+                this.resident.other_relationship=select;
+            }
+        },
+    })
+</script>
