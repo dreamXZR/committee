@@ -7,6 +7,6 @@ class Member
 {
     public function index()
     {
-
+        return $this->fetch();
     }
 }

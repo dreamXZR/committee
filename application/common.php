@@ -809,6 +809,7 @@ if (!function_exists('plugins_url')) {
 // +----------------------------------------------------------------------
 // | 插件相关函数 end
 // +----------------------------------------------------------------------
+
 if(!function_exists('delete_file')){
     function delete_file($file_path)
     {
@@ -832,5 +833,38 @@ if(!function_exists('json_merge')){
             $arr2=array_filter(json_decode($json2,true));
         }
         return json_encode(array_merge($arr1,$arr2));
+    }
+}
+
+if(!function_exists('str_to_num')){
+    function str_to_num($str,$map_arr)
+    {
+        $num_arr=[];
+        $str_arr=explode(',', $str);
+        foreach ($str_arr as $k => $v) {
+            if($v){
+                $num_arr[]=array_search($v, $map_arr);
+            }
+
+        }
+
+        return implode(',', $num_arr);
+    }
+}
+
+if(!function_exists('num_to_str')){
+    function num_to_str($str,$map_arr)
+    {
+        $str_arr=[];
+        $num_arr=explode(',', $str);
+
+        foreach ($num_arr as $k => $v) {
+            if($v){
+                $str_arr[]=$map_arr[$v];
+            }
+
+        }
+
+        return implode(',', $str_arr);
     }
 }

@@ -6,6 +6,8 @@ use think\Model;
 
 class Resident extends Model
 {
+    protected $autoWriteTimestamp = false;
+
     public static $culture_map=[
         1=>'小学以下',
         2=>'小学',
@@ -45,4 +47,84 @@ class Resident extends Model
         2=>'本人',
         50=>'其它'
     ];
+
+    public function info()
+    {
+        return $this->belongsTo('Info','info_id');
+    }
+
+    public function setCultureAttr($value)
+    {
+        return array_search($value,self::$culture_map);
+    }
+
+    public function getCultureAttr($value)
+    {
+        $str=self::$culture_map[$value];
+        return $str;
+    }
+
+    public function setFaceAttr($value)
+    {
+        return array_search($value,self::$face_map);
+    }
+
+    public function getFaceAttr($value)
+    {
+        $str=self::$face_map[$value];
+        return $str;
+    }
+
+    public function setMarriageAttr($value)
+    {
+        return array_search($value,self::$marriage_map);
+    }
+
+    public function getMarriageAttr($value)
+    {
+        $str=self::$marriage_map[$value];
+        return $str;
+    }
+
+    public function setIdentityAttr($value)
+    {
+        return array_search($value,self::$identity_map);
+    }
+
+    public function getIdentityAttr($value)
+    {
+        $str=self::$identity_map[$value];
+        return $str;
+    }
+
+
+
+    public function getSexAttr($value)
+    {
+        if($value==0)
+        {
+            return '女';
+        }else{
+            return '男';
+        }
+    }
+
+    public function setSexAttr($value)
+    {
+        if($value=='男'){
+
+            return 1;
+        }else if($value=='女'){
+            return 0;
+        }else{
+            return $value;
+        }
+    }
+
+    public static function del($id)
+    {
+        self::where(['id'=>$id])->delete();
+    }
+
+
 }
