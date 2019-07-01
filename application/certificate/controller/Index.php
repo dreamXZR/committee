@@ -57,14 +57,14 @@ class Index extends Admin
 
             //数据完成
             $data['charge_name']=constant('ADMIN_NICK');  //负责人
-            $data['images']=$data['image_path'] ?? [];
+            $data['images']=isset($data['image_path']) ? \json_encode($data['image_path']) : '';
             $data['number']=Certificate::getNumber();
 
             if(!Certificate::create($data)){
                 return $this->error('证明信添加失败');
             }
 
-            return $this->success('证明信添加成功','index/index');
+            return $this->success('证明信添加成功','index');
 
         }
         $this->assign('upload_url',url('image/upload','folder=certificate'));
@@ -113,7 +113,7 @@ class Index extends Admin
             if (!Certificate::update($data)) {
                 return $this->error('修改失败');
             }
-            return $this->success('修改成功');
+            return $this->success('修改成功','index');
         }
 
         $id = $this->request->param('id/d');
@@ -126,15 +126,26 @@ class Index extends Admin
         return $this->fetch('certificate_form');
     }
 
-    /**
-     * 数据筛选
-     * @return string
-     */
-    public function select()
-    {
-        if($this->request->isPost()){
 
-        }
+
+    public function show()
+    {
+        $id=$this->request->param('id/d');
+
+        $certificate=Certificate::findOrEmpty($id);
+        $this->assign('certificate',$certificate);
+
         return $this->fetch();
+    }
+
+    public function pdf()
+    {
+        $id=$this->request->param('id/d');
+
+        $certificate=Certificate::findOrEmpty($id);
+        $this->assign('certificate',$certificate);
+
+        $this->view->engine->layout(false);
+        return $this->fetch('certificate_pdf');
     }
 }

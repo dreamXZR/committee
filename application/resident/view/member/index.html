@@ -1,0 +1,58 @@
+<table id="dataTable"></table>
+
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-group fl">
+        <a href="{:url('excel')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-download-circle" >&nbsp;excel导出</a>
+        <a class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-search" id="search_btn">&nbsp;数据筛选</a>
+    </div>
+</script>
+
+{include file="system@block/layui" /}
+<script type="text/javascript">
+    layui.use(['table','jquery'], function() {
+        var table = layui.table,
+            layer = layui.layer,
+            $=layui.jquery;
+
+        table.render({
+            elem: '#dataTable'
+            ,url: '{:url()}' //数据接口
+            ,page: true //开启分页
+            ,skin: 'row'
+            ,even: true
+            ,limit: 20
+            ,text: {
+                none : '暂无相关数据'
+            }
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: ['filter']
+            ,cols: [[ //表头
+                ,{field: 'name', title: '姓名'}
+                ,{field:'residence_address', width:180,title:'户籍地址'}
+                ,{field:'present_address',title:'现居住地', width:180, templet: function(d){
+                        return d.info.housing_estate+d.info.building+'-'+d.info.door+'-'+d.info.no;
+                    }}
+                ,{field:'residence_status',title:'户籍性质',templet:function (d) {
+                      return d.info.residence_status;
+                    }}
+                ,{field:'relationship',title:'与户主关系'}
+                ,{field:'sex',title:'性别'}
+                ,{field:'nation',title:'民族'}
+                ,{field:'birthday',title:'出生年月'}
+                ,{field:'id_number',title:'身份证号'}
+                ,{field:'culture',title:'文化程度'}
+                ,{field:'face',title:'政治面貌'}
+                ,{field:'marriage',title:'婚姻状况'}
+                ,{field:'identity',title:'身份类别'}
+                ,{field:'phone',title:'联系电话'}
+                ,{field:'unit',title:'工作单位'}
+                ,{field:'other',title:'备注'}
+
+            ]]
+        });
+
+
+
+    });
+
+</script>

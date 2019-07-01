@@ -1,0 +1,85 @@
+<table class="layui-table" lay-skin="line">
+    <colgroup>
+        <col width="160">
+        <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th colspan="2">
+            <a href="{:url('edit')}?id={$death_proof.id}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+            <a href="{:url('pdf')}?id={$death_proof.id}" class="layui-btn layui-btn-xs layui-btn-warm">打印</a>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td align="right">死者姓名:</td>
+        <td>{$death_proof.name}</td>
+    </tr>
+    <tr>
+        <td align="right">死者身份证号:</td>
+        <td>{$death_proof.id_number}</td>
+    </tr>
+    <tr>
+        <td align="right">户籍地址:</td>
+        <td>{$death_proof.residence_address}</td>
+    </tr>
+    <tr>
+        <td align="right">现居住地址:</td>
+        <td>{$death_proof.present_address}</td>
+    </tr>
+    <tr>
+        <td align="right">死亡时间:</td>
+        <td>{$death_proof.death_date}</td>
+    </tr>
+    <tr>
+        <td align="right">死亡地点:</td>
+        <td>{$death_proof.death_address}</td>
+    </tr>
+    <tr>
+        <td align="right">申请人:</td>
+        <td>{$death_proof.applicant}</td>
+    </tr>
+    <tr>
+        <td align="right">申请人身份证号:</td>
+        <td>{$death_proof.applicant_id_number}</td>
+    </tr>
+    <tr>
+        <td align="right">与死者关系:</td>
+        <td>
+            {switch $death_proof.applicant_death_relation}
+                {case  1}配偶{/case}
+                {case  2}子女{/case}
+                {case  3}父母{/case}
+            {/switch}
+        </td>
+    </tr>
+    <tr>
+        <td align="right">委托人:</td>
+        <td>{$death_proof.agent}</td>
+    </tr>
+    <tr>
+        <td align="right">委托人身份证:</td>
+        <td>{$death_proof.agent_id_number}</td>
+    </tr>
+    <tr>
+        <td align="right">与申请人关系:</td>
+        <td>{$death_proof.agent_applicant_relation}</td>
+    </tr>
+    <tr>
+        <td align="right">其它:</td>
+        <td>{$death_proof.other}</td>
+    </tr>
+    <tr>
+        <td align="right">上传图片:</td>
+        <td>
+            {if $death_proof.images != ''}
+            {foreach \json_decode($work_proof.images) as $v}
+            <a href="/upload/{$v}"><img src="/upload/{$v}" ></a>
+            {/foreach}
+            {/if}
+        </td>
+    </tr>
+    </tbody>
+</table>
+{include file="system@block/layui" /}

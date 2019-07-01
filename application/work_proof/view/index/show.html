@@ -1,0 +1,63 @@
+<table class="layui-table" lay-skin="line">
+    <colgroup>
+        <col width="160">
+        <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th colspan="2">
+            <a href="{:url('edit')}?id={$work_proof.id}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+            <a href="{:url('pdf')}?id={$work_proof.id}" class="layui-btn layui-btn-xs layui-btn-warm">打印</a>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td align="right">人员姓名:</td>
+        <td>{$work_proof.name}</td>
+    </tr>
+    <tr>
+        <td align="right">身份证号:</td>
+        <td>{$work_proof.id_number}</td>
+    </tr>
+    <tr>
+        <td align="right">现居住地址:</td>
+        <td>{$work_proof.present_address}</td>
+    </tr>
+    <tr>
+        <td align="right">联系电话:</td>
+        <td>{$work_proof.phone}</td>
+    </tr>
+    <tr>
+        <td align="right">灵活就业内容:</td>
+        <td>{$work_proof.work_content}</td>
+    </tr>
+    <tr>
+        <td align="right">工作地点:</td>
+        <td>{$work_proof.work_place}</td>
+    </tr>
+    <tr>
+        <td align="right">随迁子女:</td>
+        <td>{$work_proof.child_name}</td>
+    </tr>
+    <tr>
+        <td align="right">子女性别:</td>
+        <td>{$work_proof.child_sex == 0 ? '女' : '男'}</td>
+    </tr>
+    <tr>
+        <td align="right">子女身份证号:</td>
+        <td>{$work_proof.child_id_number}</td>
+    </tr>
+    <tr>
+        <td align="right">上传图片:</td>
+        <td>
+            {if $work_proof.images != ''}
+                {foreach \json_decode($work_proof.images) as $v}
+                    <a href="/upload/{$v}"><img src="/upload/{$v}" ></a>
+                {/foreach}
+            {/if}
+        </td>
+    </tr>
+    </tbody>
+</table>
+{include file="system@block/layui" /}

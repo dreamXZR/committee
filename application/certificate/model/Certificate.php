@@ -78,4 +78,9 @@ class Certificate extends Model
 
         return $where;
     }
+
+    public function getDateAttr($value,$data)
+    {
+        return explode('-',date('Y-m-d',$data['create_time']));
+    }
 }

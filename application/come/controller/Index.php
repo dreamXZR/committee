@@ -1,11 +1,11 @@
 <?php
 
-namespace app\visitor\controller;
+namespace app\come\controller;
 
 use app\system\controller\Admin;
-use app\visitor\model\ComeRegister;
+use app\come\model\ComeRegister;
 use app\common\controller\SystemUpload;
-use app\visitor\validate\Come;
+use app\come\validate\Come;
 
 /**
  * 来访登记控制器
@@ -13,7 +13,7 @@ use app\visitor\validate\Come;
  */
 class Index extends Admin
 {
-    protected $hisiModel = 'VisitorRegister';
+    protected $hisiModel = 'ComeRegister';
 
     protected $tabData;
 
@@ -77,7 +77,7 @@ class Index extends Admin
             $data = $this->request->post();
 
             //验证
-            $result = $this->validate($data,'Visitor');
+            $result = $this->validate($data,'Come');
             if($result !== true){
                 return $this->error($result);
             }
@@ -95,7 +95,7 @@ class Index extends Admin
 
         }
         $this->assign('upload_url',url('image/upload','folder=visitor'));
-        return $this->fetch('visitor_form');
+        return $this->fetch('come_form');
     }
 
     /**
@@ -128,7 +128,7 @@ class Index extends Admin
             }
 
             //验证
-            $result = $this->validate($data,'Visitor');
+            $result = $this->validate($data,'Come');
             if($result !== true){
                 return $this->error($result);
             }
@@ -150,15 +150,15 @@ class Index extends Admin
         $this->assign('formData',$formData);
         $this->assign('upload_url',url('image/upload','folder=visitor'));
         $this->assign('image_url',url('image/index','id='.$formData['id']));
-        return $this->fetch('visitor_form');
+        return $this->fetch('come_form');
     }
 
     public function show()
     {
         $id=$this->request->param('id/d');
 
-        $visitor=ComeRegister::findOrEmpty($id);
-        $this->assign('visitor',$visitor);
+        $come=ComeRegister::findOrEmpty($id);
+        $this->assign('come',$come);
 
         return $this->fetch();
     }
@@ -167,10 +167,10 @@ class Index extends Admin
     {
         $id=$this->request->param('id/d');
 
-        $visitor=ComeRegister::findOrEmpty($id);
-        $this->assign('visitor',$visitor);
+        $come=ComeRegister::findOrEmpty($id);
+        $this->assign('come',$come);
 
         $this->view->engine->layout(false);
-        return $this->fetch('visitor_pdf');
+        return $this->fetch('come_pdf');
     }
 }

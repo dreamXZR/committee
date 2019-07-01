@@ -127,10 +127,7 @@ class SystemModule extends Model
             return false;
         }
 
-        if (!is_writable(Env::get('root_path').'public/theme')) {
-            $this->error = '[theme]目录不可写！';
-            return false;
-        }
+
 
         if (!is_writable(Env::get('root_path').'public/static')) {
             $this->error = '[static]目录不可写！';
@@ -156,16 +153,11 @@ class SystemModule extends Model
 
         // 生成对应的前台主题模板目录、静态资源目录、后台静态资源目录
         $dir_list = [
-            'public/theme/'.$data['name'].'/default/static/css',
-            'public/theme/'.$data['name'].'/default/static/js',
-            'public/theme/'.$data['name'].'/default/static/image',
-            'public/theme/'.$data['name'].'/default/index',
             'public/static/'.$data['name'].'/css',
             'public/static/'.$data['name'].'/js',
             'public/static/'.$data['name'].'/image',
         ];
         self::mkDir($dir_list);
-        self::mkThemeConfig('theme/'.$data['name'].'/default/', $data);
         self::mkSql($mod_path, $data);
         self::mkMenu($mod_path, $data);
         self::mkInfo($mod_path, $data);

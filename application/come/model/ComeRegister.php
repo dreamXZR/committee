@@ -1,14 +1,14 @@
 <?php
 
-namespace app\death_proof\model;
+namespace app\come\model;
 
 use think\Model;
 use think\facade\Cache;
 
-class DeathProof extends Model
+class ComeRegister extends Model
 {
     /**
-     * 根据id删除信息卡
+     * 根据id删除信息
      * @param $ids
      * @return bool
      */
@@ -42,7 +42,7 @@ class DeathProof extends Model
     public static function getNumber()
     {
         $today=date('Ymd',time());
-        $number=Cache::get('system_number');
+        $number=Cache::get('visitor_number');
         if($number){
             if($number[0]!=$today){
                 $new_number=date('Ymd',time()).'001';
@@ -52,35 +52,24 @@ class DeathProof extends Model
         }else{
             $new_number=date('Ymd',time()).'001';
         }
-        Cache::set('system_number',[$today,$new_number]);
+        Cache::set('visitor_number',[$today,$new_number]);
         return $new_number;
     }
 
-    /**
-     * 条件查询
-     * @param array $where
-     * @param array $request
-     * @return array
-     */
     public static function whereSql($where=[],$request=[])
     {
-        if(isset($request['number']) && $request['number']){
-            $where[]=['number','eq',$request['number']];
+        if(isset($request['is_finish']) && $request['is_finish']==0){
+            $where[]=['is_finish','eq',0];
         }
 
         if(isset($request['name']) && $request['name']){
             $where[]=['name','eq',$request['name']];
         }
 
-        if(isset($request['id_number']) && $request['id_number']){
-            $where[]=['id_number','eq',$request['id_number']];
+        if(isset($request['charge_name']) && $request['charge_name']){
+            $where[]=['charge_name','eq',$request['charge_name']];
         }
 
         return $where;
-    }
-
-    public function getDateAttr($value,$data)
-    {
-        return explode('-',date('Y-m-d',$data['create_time']));
     }
 }

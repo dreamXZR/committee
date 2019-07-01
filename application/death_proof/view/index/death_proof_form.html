@@ -69,7 +69,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">委托人身份证:</label>
                     <div class="layui-input-inline" style="width: 75%;">
-                        <input type="text" name="agent_id_numnber"  placeholder="" class="layui-input field-agent_id_numnber">
+                        <input type="text" name="agent_id_number"  placeholder="" class="layui-input field-agent_id_numnber">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -100,7 +100,7 @@
                     </div>
                 </div>
                 <div class="pop-bottom-bar hisi-footer">
-                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="formSubmit" hisi-data="{pop: true, refresh: true}">提交保存</button>
+                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="formSubmit" >提交保存</button>
                     <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10">返回</a>
                 </div>
                 {else /}
@@ -111,7 +111,7 @@
                     <input type="hidden" class="field-id" name="id">
                 </div>
                 <div class="pop-bottom-bar hisi-footer">
-                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="formSubmit" hisi-data="{pop: true, refresh: true}">提交修改</button>
+                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="formSubmit" >提交修改</button>
                     <a href="{:url('index')}" class="layui-btn layui-btn-primary ml10">返回</a>
                 </div>
                 {/if}

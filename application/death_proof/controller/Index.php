@@ -4,6 +4,7 @@ namespace app\death_proof\controller;
 
 use app\system\controller\Admin;
 use app\death_proof\model\DeathProof;
+use app\common\controller\SystemUpload;
 
 /**
  * 证明信控制器
@@ -57,7 +58,7 @@ class Index extends Admin
             }
 
             //数据完成
-            $data['images']=$data['image_path'] ?? [];
+            $data['images']=isset($data['image_path']) ? \json_encode($data['image_path']) : '';
             $data['number']=DeathProof::getNumber();
 
 
@@ -65,7 +66,7 @@ class Index extends Admin
                 return $this->error('证明信添加失败');
             }
 
-            return $this->success('证明信添加成功','index/index');
+            return $this->success('证明信添加成功','index');
 
         }
         $this->assign('upload_url',url('image/upload','folder=deathProof'));
@@ -97,6 +98,10 @@ class Index extends Admin
             //提交数据
             $data = $this->request->post();
 
+            if(!$death_proof=DeathProof::find($data['id'])){
+                return $this->error('该数据不存在');
+            }
+
             //验证
             if($data['agent']){
                 $result=$this->validate($data,'DeathProof.hasAgent');
@@ -104,13 +109,13 @@ class Index extends Admin
                 $result = $this->validate($data,'DeathProof');
             }
 
-            $data['images']=$data['image_path'] ?? [];
+            $data['images']=SystemUpload::getUpdateJson($data['image_path'] ?? [],$death_proof);
 
             //信息修改
             if (!DeathProof::update($data)) {
                 return $this->error('修改失败');
             }
-            return $this->success('修改成功');
+            return $this->success('修改成功','index');
         }
 
         $id = $this->request->param('id/d');
@@ -121,5 +126,26 @@ class Index extends Admin
         $this->assign('upload_url',url('image/upload','folder=deathProof'));
         $this->assign('image_url',url('image/index','id='.$formData['id']));
         return $this->fetch('death_proof_form');
+    }
+
+    public function show()
+    {
+        $id=$this->request->param('id/d');
+
+        $death_proof=DeathProof::findOrEmpty($id);
+        $this->assign('death_proof',$death_proof);
+
+        return $this->fetch();
+    }
+
+    public function pdf()
+    {
+        $id=$this->request->param('id/d');
+
+        $death_proof=DeathProof::findOrEmpty($id);
+        $this->assign('death_proof',$death_proof);
+
+        $this->view->engine->layout(false);
+        return $this->fetch('death_proof_pdf');
     }
 }

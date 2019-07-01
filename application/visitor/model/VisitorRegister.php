@@ -55,4 +55,21 @@ class VisitorRegister extends Model
         Cache::set('visitor_number',[$today,$new_number]);
         return $new_number;
     }
+
+    public static function whereSql($where=[],$request=[])
+    {
+        if(isset($request['is_finish']) && $request['is_finish']==0){
+            $where[]=['is_finish','eq',0];
+        }
+
+        if(isset($request['name']) && $request['name']){
+            $where[]=['name','eq',$request['name']];
+        }
+
+        if(isset($request['charge_name']) && $request['charge_name']){
+            $where[]=['charge_name','eq',$request['charge_name']];
+        }
+
+        return $where;
+    }
 }

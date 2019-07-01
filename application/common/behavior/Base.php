@@ -44,8 +44,7 @@ class Base
                 exit($module.' 模块可能未启用或者未安装！');
             }
 
-            // 设置模块的默认主题
-            $theme = $modInfo['theme'] ? $modInfo['theme'] : 'default';
+
         }
 
         // 获取站点根目录
@@ -75,10 +74,7 @@ class Base
             '__PUBLIC_CSS__'    => $rootDir.'static/css',
             '__PUBLIC_JS__'     => $rootDir.'static/js',
             '__PUBLIC_IMG__'    => $rootDir.'static/image',
-            // 前台模块静态目录
-            '__CSS__'           => $rootDir.'theme/'.$module.'/'.$theme.'/static/css',
-            '__JS__'            => $rootDir.'theme/'.$module.'/'.$theme.'/static/js',
-            '__IMG__'           => $rootDir.'theme/'.$module.'/'.$theme.'/static/image',
+
 
         ];
 
