@@ -7,7 +7,6 @@ use app\resident\model\Nation;
 use app\resident\model\Resident;
 use app\system\controller\Admin;
 use app\resident\model\Info as infoModel;
-use think\Db;
 
 class Info extends Admin
 {
@@ -22,12 +21,15 @@ class Info extends Admin
             $page       = $this->request->param('page/d', 1);
             $limit      = $this->request->param('limit/d', 15);
 
-            //默认筛选
-            $where[]=['replace_time','=',0];
-            $data['data']=infoModel::where($where)->page($page)->limit($limit)
-                                    ->field(['id','housing_estate','building','door','no'])
+
+            //筛选
+            $query=infoModel::selectQuery($this->request->get());
+
+            $data['data']=$query->order('housing_estate,building,door,no')->page($page)->limit($limit)
+                                    ->field(['hisi_info.id','housing_estate','building','door','no'])
                                     ->append(['all_present_address'])->select();
-            $data['count']=infoModel::where($where)->count('*');
+
+            $data['count']=$query->count('*');
             $data['code']=0;
             $data['message']='';
 
@@ -86,6 +88,10 @@ class Info extends Admin
         }
     }
 
+    /**
+     * 修改数据
+     * @return mixed|string|void
+     */
     public function edit()
     {
         if($this->request->isPost()){
@@ -131,6 +137,9 @@ class Info extends Admin
         ]);
     }
 
+    /**
+     * 删除信息卡内的单条居民信息
+     */
     public function delSingleInfo()
     {
         $type = $this->request->param('type');
@@ -143,5 +152,77 @@ class Info extends Admin
             Handicapped::del($id);
         }
 
+    }
+
+    public function show()
+    {
+        $id=$this->request->param('id/d');
+
+        $info=infoModel::with(['residents','handicappeds'])->findOrEmpty($id);
+        $handicappeds=$info->handicappeds;
+        $residents=$info->residents;
+
+        $tabData['menu']=[
+            [
+                'title' => '居民信息',
+                'url'   => url('show',['id'=>$info->id]),
+            ],
+            [
+                'title' => '历史记录',
+                'url'   => url('history',['id'=>$info->id]),
+            ],
+        ];
+        $tabData['current'] = url('show',['id'=>$info->id]);
+
+        $this->assign('tabData', $tabData);
+        $this->assign('tabType', 3);
+        $this->assign('info',$info);
+        $this->assign('residents',$residents);
+        $this->assign('handicappeds',$handicappeds);
+
+        return $this->fetch();
+    }
+
+    public function history()
+    {
+        $id=$this->request->param('id/d');
+        $info=infoModel::with(['residents','handicappeds'])->findOrEmpty($id);
+
+        $tabData['menu']=[
+            [
+                'title' => '居民信息',
+                'url'   => url('show',['id'=>$info->id]),
+            ],
+            [
+                'title' => '历史记录',
+                'url'   => url('history',['id'=>$info->id]),
+            ],
+        ];
+        $tabData['current'] = url('history',['id'=>$info->id]);
+
+        $this->assign('tabData', $tabData);
+        $this->assign('tabType', 3);
+        return $this->fetch();
+    }
+
+    public function pdf()
+    {
+        $id=$this->request->param('id/d');
+
+        $info=infoModel::with(['residents','handicappeds'])->findOrEmpty($id);
+        $handicappeds=$info->handicappeds;
+        $residents=$info->residents;
+        $fill=[
+            10-count($residents),
+            4-count($handicappeds)
+        ];
+
+        $this->assign('info',$info);
+        $this->assign('residents',$residents);
+        $this->assign('handicappeds',$handicappeds);
+        $this->assign('fill',$fill);
+
+        $this->view->engine->layout(false);
+        return $this->fetch('info_pdf');
     }
 }

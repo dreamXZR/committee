@@ -117,7 +117,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="layui-btn layui-btn-primary" data-dismiss="modal" id="bb_close">关闭</button>
+                <button type="button" class="layui-btn layui-btn-primary" data-dismiss="modal" id="bb_close" @click="bb_close">关闭</button>
                 <button v-if="resident_status" type="button" class="layui-btn"  @click='add_resident_info'>提交</button>
                 <button  v-if="resident_status===false" type="button" class="layui-btn"  @click='update_resident_info' >修改</button>
             </div>

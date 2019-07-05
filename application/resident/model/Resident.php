@@ -126,5 +126,43 @@ class Resident extends Model
         self::where(['id'=>$id])->delete();
     }
 
+    public static function selectQuery($request=[])
+    {
+        //默认
+        $query=self::where('is_replace','=',0)
+                    ->join('info','info.id=hisi_resident.id')
+                    ->order('info.housing_estate,info.building,info.door,info.no');
+
+        if(isset($request['name']) && $request['name']){
+            $query=$query->where('hisi_resident.name','=',$request['name']);
+        }
+
+        if(isset($request['id_number']) && $request['id_number']){
+            $query=$query->where('hisi_resident.id_number','=',$request['id_number']);
+        }
+
+        if(isset($request['relationship']) && $request['relationship']){
+            $query=$query->where('hisi_resident.relationship','=',$request['relationship']);
+        }
+
+        if(isset($request['nation']) && $request['nation']){
+            $query=$query->whereIn('hisi_resident.nation',explode(',',$request['nation']));
+        }
+        if(isset($request['culture']) && $request['culture']){
+            $query=$query->whereIn('hisi_resident.culture',explode(',',$request['culture']));
+        }
+        if(isset($request['face']) && $request['face']){
+            $query=$query->whereIn('hisi_resident.face',explode(',',$request['face']));
+        }
+        if(isset($request['marriage']) && $request['marriage']){
+            $query=$query->whereIn('hisi_resident.marriage',explode(',',$request['marriage']));
+        }
+        if(isset($request['identity']) && $request['identity']){
+            $query=$query->whereIn('hisi_resident.identity',explode(',',$request['identity']));
+        }
+
+        return $query;
+    }
+
 
 }

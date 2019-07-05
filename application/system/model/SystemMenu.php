@@ -213,7 +213,10 @@ class SystemMenu extends Model
 
         }
 
-        Cache::set('admin_bread_crumbs_'.$id, $menu);
+        if(config('sys.app_debug') == 0){
+            Cache::set('admin_bread_crumbs_'.$id, $menu);
+        }
+
 
         return $menu;
     }
@@ -398,6 +401,51 @@ class SystemMenu extends Model
         }
         $this->error = '参数传递错误';
         return false;
+    }
+
+    /**
+     * 导入菜单数据
+     * @param array $data
+     * @param string $mod
+     * @param string $type
+     * @param int $pid
+     * @return bool
+     */
+    public static function importMenu($data = [], $mod = '', $type = 'module', $pid = 0)
+    {
+        if (empty($data)) {
+            return true;
+        }
+
+        if ($type == 'module') {// 模型菜单
+            foreach ($data as $v) {
+
+                if (!isset($v['pid'])) {
+                    $v['pid'] = $pid;
+                }
+
+                $childs = '';
+
+                if (isset($v['childs'])) {
+                    $childs = $v['childs'];
+                    unset($v['childs']);
+                }
+
+                $res = (new \app\system\model\SystemMenu)->storage($v);
+
+                if (!$res) {
+                    return false;
+                }
+
+                if (!empty($childs)) {
+                    self::importMenu($childs, $mod, $type, $res['id']);
+                }
+
+            }
+        }
+
+        self::getMainMenu(true);
+        return true;
     }
 
 }

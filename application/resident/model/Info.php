@@ -219,6 +219,47 @@ class Info extends Model
         return true;
     }
 
+    /**
+     * 筛选条件
+     * @param array $request
+     * @return \think\db\Query
+     */
+    public static function  selectQuery($request=[])
+    {
+        //关联查询
+        if(isset($request['name']) || isset($request['id_number'])){
+            if($request['name']){
+                $map['name']=$request['name'];
+            }
+
+            if($request['id_number']){
+                $map['id_number']=$request['id_number'];
+            }
+            $query=self::hasWhere('residents',$map);
+            $query=$query->where('replace_time','=',0);
+        }else{
+            $query=self::where('replace_time','=',0);
+        }
+
+
+
+        if(isset($request['housing_estate']) && $request['housing_estate']){
+            $query=$query->where('housing_estate','=',$request['housing_estate']);
+        }
+        if(isset($request['building']) && $request['building']){
+            $query=$query->where('building','=',$request['building']);
+        }
+        if(isset($request['door']) && $request['door']){
+            $query=$query->where('door','=',$request['door']);
+        }
+        if(isset($request['no']) && $request['no']){
+            $query=$query->where('no','=',$request['no']);
+        }
+
+        return $query;
+    }
+
+
 
 
 }

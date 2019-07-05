@@ -4,7 +4,6 @@ namespace app\common\behavior;
 
 use app\system\model\SystemConfig as ConfigModel;
 use app\system\model\SystemModule as ModuleModel;
-use app\system\model\SystemPlugins as PluginsModel;
 use Env;
 use Request;
 use View;
@@ -22,24 +21,21 @@ class Base
         // 安装操作直接return
         if (defined('INSTALL_ENTRANCE')) return;
 
-        // 设置插件配置
-        config(PluginsModel::getConfig());
-
-        // 设置模块配置
-        config(ModuleModel::getConfig());
 
         // 设置系统配置
         config(ConfigModel::getConfig());
+        // 设置模块配置
+        config(ModuleModel::getConfig());
+
 
         // 判断模块是否存在且已安装
-        $theme = 'default';
         if ($module != 'index' && !defined('ENTRANCE')) {
 
             if (empty($module)) {
                 $module = config('default_module');
             }
 
-            $modInfo = ModuleModel::where(['name' => $module, 'status' => 2])->find();
+            $modInfo = ModuleModel::where(['name' => $module, 'status' => 1])->find();
             if (!$modInfo) {
                 exit($module.' 模块可能未启用或者未安装！');
             }
@@ -60,8 +56,7 @@ class Base
             '__STATIC__'        => $rootDir.'static',
             // 文件上传目录
             '__UPLOAD__'        => $rootDir.'upload',
-            // 插件目录
-            '__PLUGINS__'       => $rootDir.'plugins',
+
             // 后台公共静态目录
             '__ADMIN_CSS__'     => $rootDir.'static/system/css',
             '__ADMIN_JS__'      => $rootDir.'static/system/js',
@@ -88,14 +83,6 @@ class Base
 
         View::config(['tpl_replace_string' => $viewReplaceStr]);
 
-        if(defined('ENTRANCE') && ENTRANCE == 'admin') {
 
-        if ($module == 'index') {
-            header('Location: '.url('system/publics/index'));
-            exit;
-        }
-
-
-        }
     }
 }

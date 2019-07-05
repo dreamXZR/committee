@@ -1,0 +1,92 @@
+<link rel="stylesheet" type="text/css" href="__ADMIN_CSS__/formSelects-v4.css" />
+<button type="button" tooltip="新增"  style="display:none;"  data-toggle="modal" data-target="#searchModal" id="search_form" data-backdrop="false"></button>
+<div class="modal fade" id="searchModal" style="top: 8%;">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">数据筛选</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{:url()}" method="get" id="system-table-search">
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label" style="width: 20%;">姓名:</label>
+                        <div class="layui-input-inline" style="width: 75%;">
+                            <input type="text"  placeholder="请输入姓名"  class="layui-input" name='name'>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label" style="width: 20%;">身份证号:</label>
+                        <div class="layui-input-inline" style="width: 75%;">
+                            <input type="text" placeholder="请输入身份证号" class="layui-input" name='id_number'>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label" style="width: 20%;">与户主关系:</label>
+                        <div class="layui-input-inline" style="width: 75%;">
+                            <input type="text" placeholder="请输入" class="layui-input" name='relationship'>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label" style="width: 20%;">民族:</label>
+                        <div class="layui-input-inline" style="width: 75%;">
+                            <select name="nation" xm-select="nation">
+                                {foreach $nation as $v}
+                                <option value="{$v.name}">{$v.name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label" style="width: 20%;">文化程度:</label>
+                        <div class="layui-input-inline" style="width: 75%;">
+                            <select name="culture" xm-select="culture">
+                                {foreach \app\resident\model\Resident::$culture_map as $k=>$v}
+                                <option value="{$k}">{$v}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label" style="width: 20%;">政治面貌:</label>
+                        <div class="layui-input-inline" style="width: 75%;">
+                            <select name="face" xm-select="face">
+                                {foreach \app\resident\model\Resident::$face_map as $k=>$v}
+                                <option value="{$k}">{$v}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label" style="width: 20%;">身份类别:</label>
+                        <div class="layui-input-inline" style="width: 75%;">
+                            <select name="identity" xm-select="identity">
+                                {foreach \app\resident\model\Resident::$identity_map as $k=>$v}
+                                <option value="{$k}">{$v}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label" style="width: 20%;">婚姻状况:</label>
+                        <div class="layui-input-inline" style="width: 75%;">
+                            <select name="marriage" xm-select="marriage">
+                                {foreach \app\resident\model\Resident::$marriage_map as $k=>$v}
+                                <option value="{$k}">{$v}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <button type="submit" style="display: none;" id="search_form_submit">查询</button>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="layui-btn layui-btn-primary" data-dismiss="modal" id="search_close_btn">关闭</button>
+                <button  type="button" class="layui-btn"  id="search_submit_btn">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__ADMIN_JS__/formSelects-v4.min.js" type="text/javascript" charset="utf-8"></script>

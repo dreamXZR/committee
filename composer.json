@@ -22,7 +22,8 @@
         "phpoffice/phpspreadsheet": "^1.7",
         "knplabs/knp-snappy": "^1.1",
         "h4cc/wkhtmltopdf-i386": "0.12.x",
-        "h4cc/wkhtmltopdf-amd64": "0.12.x"
+        "h4cc/wkhtmltopdf-amd64": "0.12.x",
+        "guzzlehttp/guzzle": "^6.3"
     },
     "autoload": {
         "psr-4": {

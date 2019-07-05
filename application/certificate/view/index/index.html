@@ -1,5 +1,5 @@
 {include file="index/select" /}
-<table id="dataTable"></table>
+<table id="dataTable" lay-filter="certificate"></table>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
     <a href="{:url('show')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-primary">查看</a>
     <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
@@ -11,7 +11,7 @@
     <div class="layui-btn-group fl">
         <a href="{:url('add')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-add-circle-fine" >&nbsp;添加</a>
         <a data-href="{:url('del')}" class="layui-btn layui-btn-primary layui-btn-sm j-page-btns confirm layui-icon layui-icon-close red">&nbsp;删除</a>
-        <a class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-search" id="search_btn">&nbsp;数据筛选</a>
+        <a class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-search" lay-event="search">&nbsp;数据筛选</a>
     </div>
 </script>
 
@@ -43,9 +43,15 @@
             ]]
         });
 
-        $('#search_btn').click(function () {
-            $("#search_form").toggle();
+        table.on('toolbar(certificate)', function(obj){
+            switch(obj.event){
+                case 'search':
+                    $("#search_form").toggle();
+                    break;
+            }
         });
+
+
 
 
 

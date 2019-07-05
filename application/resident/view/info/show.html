@@ -1,0 +1,160 @@
+<style>
+    .news{
+        margin: 0 auto;
+    }
+    .new-tit{
+        position: relative;
+        min-height: 35px;
+        background: #fff;
+
+        color: #555;
+        padding-left: 12px;
+        line-height: 34px;
+        font-size: 13px;
+    }
+    .new-cnt{
+        background-color: #fbfbfb;
+        padding: 12px;
+
+    }
+    .new-cnt .layui-form {
+        width: 100%!important;
+    }
+
+
+
+</style>
+<table class="layui-table" lay-skin="line">
+    <colgroup>
+        <col width="160">
+        <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th colspan="2">
+            <a href="{:url('edit')}?id={$info.id}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+            <a href="{:url('pdf')}?id={$info.id}" class="layui-btn layui-btn-xs layui-btn-warm">打印</a>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td align="right">现居住地址:</td>
+        <td>{$info.all_present_address}</td>
+    </tr>
+    <tr>
+        <td align="right">户籍性质:</td>
+        <td>{$info.residence_status}</td>
+    </tr>
+    <tr>
+        <td align="right">房屋使用人:</td>
+        <td>{$info.house_people}</td>
+    </tr>
+    <tr>
+        <td align="right">房屋状态:</td>
+        <td>{$info.house_status}</td>
+    </tr>
+    <tr>
+        <td align="right">住户情况:</td>
+        <td>{$info.people}</td>
+    </tr>
+
+    <tr>
+        <td align="right">家庭状况:</td>
+        <td>{$info.situation}</td>
+    </tr>
+    <tr>
+        <td align="right">备注:</td>
+        <td>{$info.other}</td>
+    </tr>
+
+
+    </tbody>
+</table>
+
+<div class="layui-form-item">
+    <div class="news">
+        <div class="new-tit">
+            居民信息
+        </div>
+        <div class="new-cnt">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>户主关系</th>
+                    <th>民族</th>
+                    <th>政治面貌</th>
+                    <th>身份证号</th>
+                    <th>备注</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $residents as $v}
+                <tr>
+                    <td>
+                        {$v.name}
+                    </td>
+                    <td>
+                        {$v.relationship}
+                    </td>
+                    <td>
+                        {$v.nation}
+                    </td>
+                    <td>
+                        {$v.face}
+                    </td>
+                    <td>
+                        {$v.id_number}
+                    </td>
+
+                    <td>
+                        {$v.other}
+                    </td>
+
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="layui-form-item">
+    <div class="news">
+        <div class="new-tit">
+            残疾人信息
+        </div>
+        <div class="new-cnt">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>证号</th>
+                    <th>类别</th>
+                    <th>等级</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $handicappeds as $v}
+                <tr >
+                    <td>
+                        {$v.name}
+                    </td>
+                    <td>
+                        {$v.number}
+                    </td>
+                    <td>
+                        {$v.type}
+                    </td>
+                    <td>
+                        {$v.level}
+                    </td>
+
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{include file="system@block/layui" /}

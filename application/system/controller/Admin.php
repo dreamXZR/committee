@@ -18,12 +18,6 @@ class Admin extends Common
     protected $hisiModel = '';
     // [通用添加、修改专用] 表名(不含表前缀) 
     protected $hisiTable = '';
-    // [通用添加、修改专用] 验证器类，格式：app\模块\validate\验证器类名
-    protected $hisiValidate = false;
-    //[通用添加专用] 添加数据验证场景名
-    protected $hisiAddScene = false;
-    //[通用更新专用] 更新数据验证场景名
-    protected $hisiEditScene = false;
 
     /**
      * 初始化方法
@@ -31,6 +25,7 @@ class Admin extends Common
     protected function initialize()
     {
         parent::initialize();
+
         $model = new UserModel();
         // 判断登陆
         $login = $model->isLogin();
@@ -60,6 +55,7 @@ class Admin extends Common
                 $curMenu = [ 'id' => 0,'title' => '', 'url' => ''];
             }
 
+            //记录操作日志
             $this->_systemLog($curMenu['title']);
 
             // 如果不是ajax请求，则读取菜单
@@ -68,9 +64,7 @@ class Admin extends Common
                 $menuParents = ['pid' => 1];
 
                 if ($curMenu['id']) {  //获取面包屑导航数据
-
                     $breadCrumbs = MenuModel::getBreadCrumbs($curMenu['id']);
-
                     $menuParents = current($breadCrumbs);
                 } else {
                     $breadCrumbs = MenuModel::getBreadCrumbs($curMenu['id']);
@@ -138,7 +132,6 @@ class Admin extends Common
 
     /**
      * 获取当前方法URL
-     * @author 橘子俊 <364666827@qq.com>
      * @return string
      */
     protected function getActUrl() {
@@ -147,231 +140,7 @@ class Admin extends Common
         $action     = request()->action();
         return $model.'/'.$controller.'/'.$action;
     }
-    
-    /**
-     * [通用方法]添加页面展示和保存
-     * @author 橘子俊 <364666827@qq.com>
-     * @return mixed
-     */
-    public function add()
-    {
-        if ($this->request->isPost()) {
 
-            $hisiModel      = $this->request->param('hisiModel');
-            $hisiTable      = $this->request->param('hisiTable');
-            $hisiValidate   = $this->request->param('hisiValidate');
-            $hisiScene      = $this->request->param('hisiScene');
-
-            if ($hisiModel) {
-                $this->hisiModel = $hisiModel;
-                $this->hisiTable = '';
-            }
-
-            if ($hisiTable) {
-                $this->hisiTable = $hisiTable;
-                $this->hisiModel = '';
-            }
-
-            if ($hisiValidate) {
-                $this->hisiValidate = $hisiValidate;
-            }
-
-            if ($hisiScene) {
-                $this->hisiAddScene = $hisiScene;
-            }
-
-            $postData = $this->request->post();
-
-            if ($this->hisiValidate) {// 数据验证
-
-                if (strpos($this->hisiValidate, '\\') === false ) {
-
-                    if (defined('IS_PLUGINS')) {
-                        $this->hisiValidate = 'plugins\\'.$this->request->param('_p').'\\validate\\'.$this->hisiValidate;
-                    } else {
-                        $this->hisiValidate = 'app\\'.$this->request->module().'\\validate\\'.$this->hisiValidate;
-                    }
-                    
-                }
-
-                if ($this->hisiAddScene) {
-                    $this->hisiValidate = $this->hisiValidate.'.'.$this->hisiAddScene;
-                }
-
-                $result = $this->validate($postData, $this->hisiValidate);
-                if ($result !== true) {
-                    return $this->error($result);
-                }
-                
-            }
-
-            if ($this->hisiModel) {// 通过Model添加
-
-                if (defined('IS_PLUGINS')) {
-
-                    if (strpos($this->hisiModel, '\\') === false ) {
-                        $this->hisiModel = 'plugins\\'.$this->request->param('_p').'\\model\\'.$this->hisiModel;
-                    }
-
-                    $model = new $this->hisiModel;
-                    
-                } else {
-
-                    if (strpos($this->hisiModel, '/') === false ) {
-                        $this->hisiModel = $this->request->module().'/'.$this->hisiModel;
-                    }
-
-                    $model = model($this->hisiModel);
-
-                }
-
-                if (!$model->save($postData)) {
-                    return $this->error($model->getError());
-                }
-
-            } else if ($this->hisiTable) {// 通过Db添加
-
-                if (!Db::name($this->hisiTable)->insert($postData)) {
-                    return $this->error('保存失败');
-                }
-
-            } else {
-
-                return $this->error('当前控制器缺少属性（hisiModel、hisiTable至少定义一个）');
-
-            }
-
-            return $this->success('保存成功');
-        }
-
-        $template = $this->request->param('template', 'form');
-
-        return $this->fetch($template);
-    }
-
-    /**
-     * [通用方法]编辑页面展示和保存
-     * @author 橘子俊 <364666827@qq.com>
-     * @return mixed
-     */
-    public function edit()
-    {
-
-        $hisiModel = $this->request->param('hisiModel');
-        $hisiTable = $this->request->param('hisiTable');
-
-        if ($hisiModel) {
-            $this->hisiModel = $hisiModel;
-            $this->hisiTable = '';
-        }
-
-        if ($hisiTable) {
-            $this->hisiTable = $hisiTable;
-            $this->hisiModel = '';
-        }
-
-        if ($this->request->isPost()) {// 数据验证
-
-            $hisiValidate   = $this->request->param('hisiValidate');
-            $hisiScene      = $this->request->param('hisiScene');
-            
-            if ($hisiValidate) {
-                $this->hisiValidate = $hisiValidate;
-            }
-
-            if ($hisiScene) {
-                $this->hisiEditScene = $hisiScene;
-            }
-
-            $postData = $this->request->post();
-
-            if ($this->hisiValidate) {
-
-                if (strpos($this->hisiValidate, '\\') === false ) {
-
-                    if (defined('IS_PLUGINS')) {
-                        $this->hisiValidate = 'plugins\\'.$this->request->param('_p').'\\validate\\'.$this->hisiValidate;
-                    } else {
-                        $this->hisiValidate = 'app\\'.$this->request->module().'\\validate\\'.$this->hisiValidate;
-                    }
-
-                }
-
-                if ($this->hisiEditScene) {
-                    $this->hisiValidate = $this->hisiValidate.'.'.$this->hisiEditScene;
-                }
-
-                $result = $this->validate($postData, $this->hisiValidate);
-                if ($result !== true) {
-                    return $this->error($result);
-                }
-
-            }
-        }
-
-        if ($this->hisiModel) {// 通过Model更新
-
-            if (defined('IS_PLUGINS')) {
-
-                if (strpos($this->hisiModel, '\\') === false ) {
-                    $this->hisiModel = 'plugins\\'.$this->request->param('_p').'\\model\\'.$this->hisiModel;
-                }
-
-                $model = new $this->hisiModel;
-
-            } else {
-
-                if (strpos($this->hisiModel, '/') === false ) {
-                    $this->hisiModel = $this->request->module().'/'.$this->hisiModel;
-                }
-
-                $model = model($this->hisiModel);
-
-            }
-
-            $pk = $model->getPk();
-            $id = $this->request->param($pk);
-            
-            if ($this->request->isPost()) {
-
-                if ($model->save($postData, [$pk => $id]) === false) {
-                    return $this->error($model->getError());
-                }
-
-                return $this->success('保存成功');
-            }
-
-            $formData = $model->get($id);
-
-        } else if ($this->hisiTable) {// 通过Db更新
-
-            $db = Db::name($this->hisiTable);
-            $pk = $db->getPk();
-            $id = $this->request->param($pk);
-
-            if ($this->request->isPost()) {
-
-                if (!$db->where($pk, $id)->update($postData)) {
-                    return $this->error('保存失败');
-                }
-
-                return $this->success('保存成功');
-            }
-
-            $formData = $db->where($pk, $id)->find();
-
-        } else {
-
-            return $this->error('当前控制器缺少属性（hisiModel、hisiTable至少定义一个）');
-
-        }
-
-        $this->assign('formData', $formData);
-
-        $template = $this->request->param('template', 'form');
-
-        return $this->fetch($template);
-    }
 
     /**
      * [通用方法]状态设置

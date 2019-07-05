@@ -1,9 +1,25 @@
-<table id="dataTable"></table>
+{include file="system@block/info" /}
+<style>
+    .shade{
+        display: none;
+        position:fixed;
+        z-index:1000;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+</style>
+<table id="dataTable" lay-filter="resident_info"></table>
+<div class="shade">
 
+    {include file="member/select" /}
+</div>
 <script type="text/html" id="toolbar">
     <div class="layui-btn-group fl">
         <a href="{:url('excel')}" class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-download-circle" >&nbsp;excel导出</a>
-        <a class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-search" id="search_btn">&nbsp;数据筛选</a>
+        <a class="layui-btn layui-btn-primary layui-btn-sm layui-icon layui-icon-search" lay-event="search">&nbsp;数据筛选</a>
     </div>
 </script>
 
@@ -11,7 +27,6 @@
 <script type="text/javascript">
     layui.use(['table','jquery'], function() {
         var table = layui.table,
-            layer = layui.layer,
             $=layui.jquery;
 
         table.render({
@@ -51,8 +66,28 @@
             ]]
         });
 
+        table.on('toolbar(resident_info)', function(obj){
+            switch(obj.event){
+                case 'search':
+                    $('.shade').show();
+                    $('#search_form').click();
+                    break;
+            }
+        });
+
+        $('#searchModal').on('hidden.bs.modal', function () {
+            $('.shade').hide();
+        });
+
+        $('#search_submit_btn').click(function () {
+            $('#search_form_submit').click();
+            $('#search_close_btn').click();
+        });
+
+
 
 
     });
 
 </script>
+

@@ -1,7 +1,10 @@
+
 {include file="info/select" /}
 <table id="dataTable"></table>
 <script type="text/html" title="操作按钮模板" id="buttonTpl">
+    <a href="{:url('show')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-primary">查看</a>
     <a href="{:url('edit')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-normal">修改</a>
+    <a href="{:url('pdf')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-warm">打印</a>
     <a href="{:url('del')}?id={{ d.id }}" class="layui-btn layui-btn-xs layui-btn-danger j-tr-del">删除</a>
 </script>
 
