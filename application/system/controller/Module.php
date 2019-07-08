@@ -28,7 +28,7 @@ class Module extends Admin
         $this->tabData['menu']=[
             [
                 'title' => '已启用',
-                'url' => 'system/module/index?status=2',
+                'url' => 'system/module/index?status=1',
             ],
             [
                 'title' => '已停用',
@@ -46,7 +46,7 @@ class Module extends Admin
      */
     public function index()
     {
-        $status=$this->request->param('status/d',2);
+        $status=$this->request->param('status/d',1);
         $tabData= $this->tabData;
         $tabData['current'] = url('?status='.$status);
 
@@ -212,7 +212,7 @@ class Module extends Admin
         $sqlmap['identifier']   = $info['identifier'];
         $sqlmap['intro']        = $info['intro'];
         $sqlmap['version']      = $info['version'];
-        $sqlmap['status']       = 2;
+        $sqlmap['status']       = 1;
 
         ModuleModel::where('id', $id)->update($sqlmap);
         ModuleModel::getConfig('', true);
@@ -227,13 +227,13 @@ class Module extends Admin
     public function unload()
     {
         $id = get_num();
+
         $module = ModuleModel::where('id', $id)->find();
+
         if (!$module) {
             return $this->error('模块不存在');
         }
-        if ($module['status'] == 0) {
-            return $this->error('模块未安装');
-        }
+
 
         if($this->request->isPost()){
             $modPath =$this->appPath.$module['name'].'/';
@@ -251,7 +251,7 @@ class Module extends Admin
                 }
             }
 
-            $post = $this->request->post();
+
             // 导入SQL
             $sqlFile = realpath($modPath.'sql/uninstall.sql');
             if (file_exists($sqlFile)) {
@@ -282,13 +282,17 @@ class Module extends Admin
             if ( file_exists(Env::get('route_path').$module['name'].'.php') ) {
                 unlink(Env::get('route_path').$module['name'].'.php');
             }
+            //删除模块文件
+            Dir::delDir($modPath);
+            //删除模块静态文件
+            Dir::delDir('/static/'.$module['name']);
             // 删除当前模块菜单
             MenuModel::where('module', $module['name'])->delete();
             // 删除模块钩子
             model('SystemHook')->where('source', 'module.'.$module['name'])->delete();
             cache('hook_plugins', null);
-            // 更新模块状态为未安装
-            ModuleModel::where('id', $id)->update(['status' => 0, 'default' => 0, 'config' => '']);
+            // 删除模块
+            ModuleModel::where('id', $id)->delete();
             ModuleModel::getConfig('', true);
             $this->success('模块已卸载成功', url('index?status=0'));
 
