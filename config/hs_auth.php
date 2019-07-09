@@ -1,4 +1,4 @@
 <?php
 
 
-return ['key' => '$2y$10$uB1zVqXX0i.ZSuJ1uTxDz.w.Al0DWBntpd.ZM/KDhPbGsJy5Me9sS'];
+return ['key' => '$2y$10$fMMQiXBtr4a6nNYrCa8OD.5YYnl2rXUkhb.U5FqBhPwW9Uj9xmaGm'];
