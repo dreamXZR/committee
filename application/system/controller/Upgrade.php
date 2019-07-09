@@ -17,8 +17,11 @@ class Upgrade extends Admin
         parent::initialize();
 
         $this->rootPath = Env::get('root_path');
+        $this->appPath          = Env::get('app_path');
+        $this->updatePath       = $this->rootPath.'backup/uppack/';
+        $this->updateBackPath   = $this->rootPath.'backup/upback/';
         $this->updatePath = $this->rootPath.'backup/uppack/';
-        $this->cloud = new Cloud(config('hs_cloud.identifier'), $this->updatePath);
+        $this->cloud = new Cloud(config('cloud.identifier'), $this->updatePath);
     }
 
     /**
@@ -61,6 +64,28 @@ class Upgrade extends Admin
         }
 
         $this->assign('api_url', $this->cloud->apiUrl());
+        return $this->fetch();
+    }
+
+    /**
+     * 升级文件列表
+     * @author 橘子俊 <364666827@qq.com>
+     * @return mixed
+     */
+    public function lists()
+    {
+        if ($this->request->isPost()) {
+            if (!config('hs_cloud.identifier')) {
+                return $this->error('请绑定云平台');
+            }
+
+            $result = $this->getVersion();
+            return json($result);
+        }
+
+        //$this->assign('identifier', $this->identifier);
+        //$this->assign('app_type', $this->appType);
+        //$this->assign('app_version', $this->appVersion);
         return $this->fetch();
     }
 

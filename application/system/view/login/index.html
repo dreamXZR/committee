@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>后台管理登录 -  Powered by {:config('hisiphp.name')}</title>
+    <title>{:config('base.site_title')}--登陆</title>
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -33,7 +33,7 @@
     <div class="login-box">
         <form action="{:url()}" method="post" class="layui-form layui-form-pane">
             <fieldset class="layui-elem-field layui-field-title">
-                <legend style="color:#fff;">管理后台登录</legend>
+                <legend style="color:#fff;">{:config('base.site_title')}</legend>
             </fieldset>
             <div class="layui-form-item">
                 <label class="layui-form-label"><i class="layui-icon layui-icon-username"></i></label>
@@ -56,7 +56,9 @@
     </form>
 
 </div>
+<div>{:config('base.site_icp')}</div>
 </div>
+
 {include file="block/layui" /}
 <script src="__PUBLIC_JS__/particles.min.js"></script>
 <script type="text/javascript">

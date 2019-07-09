@@ -86,6 +86,7 @@ class Cloud extends Admin
         // 下载应用安装包
         $file = $this->cloud->data($data)->down('downModuleInstall');
 
+
         if (!file_exists($file)) {
             return $this->error('安装文件获取失败，请稍后在试');
         }

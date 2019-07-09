@@ -4,7 +4,6 @@ namespace app\system\controller;
 
 use app\system\model\SystemModule as ModuleModel;
 use app\system\model\SystemMenu as MenuModel;
-use app\system\model\SystemHook as HookModel;
 use hisi\Dir;
 use hisi\PclZip;
 use think\Db;
@@ -288,9 +287,7 @@ class Module extends Admin
             Dir::delDir('/static/'.$module['name']);
             // 删除当前模块菜单
             MenuModel::where('module', $module['name'])->delete();
-            // 删除模块钩子
-            model('SystemHook')->where('source', 'module.'.$module['name'])->delete();
-            cache('hook_plugins', null);
+
             // 删除模块
             ModuleModel::where('id', $id)->delete();
             ModuleModel::getConfig('', true);

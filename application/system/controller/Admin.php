@@ -26,6 +26,7 @@ class Admin extends Common
     {
         parent::initialize();
 
+
         $model = new UserModel();
         // 判断登陆
         $login = $model->isLogin();

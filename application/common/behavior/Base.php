@@ -15,6 +15,7 @@ class Base
 {
     public function run()
     {
+
         // 获取当前模块名称
         $module = strtolower(Request::module());
 
@@ -73,13 +74,7 @@ class Base
 
         ];
 
-        if (isset($_GET['_p'])) {
-            $viewReplaceStr = array_merge($viewReplaceStr, [
-                '__PLUGINS_CSS__'   => $rootDir.'static/plugins/'.$_GET['_p'].'/static/css',
-                '__PLUGINS_JS__'    => $rootDir.'static/plugins/'.$_GET['_p'].'/static/js',
-                '__PLUGINS_IMG__'   => $rootDir.'static/plugins/'.$_GET['_p'].'/static/image',
-            ]);
-        }
+
 
         View::config(['tpl_replace_string' => $viewReplaceStr]);
 
