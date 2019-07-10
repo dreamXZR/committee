@@ -37,7 +37,7 @@
                             {switch name="vo['status']"}
                                 {case value="0"}
                                     <a href="{:url('status?id='.$vo['id'].'&val=1')}" class="layui-btn layui-btn-primary layui-btn-sm j-tr-status">启用</a>
-                                    <a href="{:url('upgrade/lists?app_type=module')}" class="layui-btn layui-btn-primary layui-btn-sm">更新</a>
+                                    <a href="{:url('upgrade/lists?app_type=module&identifier='.$vo['identifier'])}" class="layui-btn layui-btn-primary layui-btn-sm">更新</a>
                                     <a href="{:url('unload?id='.$vo['id'])}" class="layui-btn layui-btn-primary layui-btn-sm">卸载</a>
                                 {/case}
                                 {case value="1"}

@@ -1,17 +1,7 @@
 <?php
-// +----------------------------------------------------------------------
-// | HisiPHP框架[基于ThinkPHP5.1开发]
-// +----------------------------------------------------------------------
-// | Copyright (c) 2016-2021 http://www.hisiphp.com
-// +----------------------------------------------------------------------
-// | HisiPHP承诺基础框架永久免费开源，您可用于学习和商用，但必须保留软件版权信息。
-// +----------------------------------------------------------------------
-// | Author: 橘子俊 <364666827@qq.com>，开发者QQ群：50304283
-// +----------------------------------------------------------------------
 
 namespace hisi;
 
-use hisi\Http;
 use GuzzleHttp\Client;
 use Env;
 
@@ -111,17 +101,11 @@ class Cloud {
 
     /**
      * 文件下载
-     * @param  string $api 接口
-     * @return array
      */
-    public function down($api)
+    public function down()
     {
-        $this->api  = self::API_URL.$api;
-
-        $params['identifier']   = $this->identifier;
 
         $saveFile   = $this->path.time().'.zip';
-        $request    = $this->run(true);
 
         $upload_path=self::API_URL.'storage/'.$this->data['file_path'];
 

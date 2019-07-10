@@ -54,7 +54,7 @@ class Module extends Admin
             'system'=>0
         ];
         $modules=ModuleModel::where($map)->order('sort,id')
-                                         ->column('id,title,intro,icon,system,config,name,version,status');
+                                         ->column('id,title,intro,icon,system,name,version,status,identifier');
 
 
         $this->assign('emptyTips','<tr><td colspan="5" align="center" height="100">未发现相关模块</td></tr>');

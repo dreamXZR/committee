@@ -21,6 +21,7 @@
             <tr>
                 <th>新版本</th>
                 <th>更新日志</th>
+                <th>升级要求</th>
                 <th>操作</th>
             </tr> 
         </thead>
@@ -43,6 +44,7 @@
                         {{#  }); }}
                     </div>
                 </td>
+                <td>{{ item.condition }}</td>
                 <td>
                     <a href="javascript:;" data-version="{{ item.version }}" class="layui-btn layui-btn-small j-ajax-upgrade">更新至此版本</a>
                 </td>
@@ -71,13 +73,14 @@ layui.use(['jquery', 'layer', 'laytpl'], function() {
             success: function(res) {
                 if (res.code == 1) {
                     layer.msg('升级包获取成功，正在安装 '+that.attr('data-version')+' ...', {time:50000});
+                    var msg_arr=res.msg.split('&&');
                     $.ajax({
                         type: "POST",
                         url: '{:url("install")}',
                         data: 'identifier={$identifier}&app_type={$app_type}&app_version={$app_version}&file='+res.msg+'&version='+that.attr('data-version'),
                         success: function(res) {
                             layer.msg(res.msg, {}, function() {
-                                location.href= res.url;
+                                location.href= "{:url('module/index',['status'=>0])}";
                             });
                         }
                     });
