@@ -4,6 +4,7 @@ namespace app\system\controller;
 
 use Env;
 use hisi\Dir;
+use Cache;
 
 /**
  * 后台首页控制器
@@ -30,7 +31,11 @@ class Index extends Admin
         $temp   = $this->request->param('temp/d', 0);
 
         if ($cache == 1) {
+            $system_number=Cache::get('system_number');
+
             Dir::delDir($path.'cache');
+
+            Cache::set('system_number',$system_number);
         }
 
         if ($temp == 1) {

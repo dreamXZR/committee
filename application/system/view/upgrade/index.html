@@ -9,7 +9,13 @@
     </thead>
     <tbody>
         <tr>
-            <td>当前版本： v{:config('committee.version')}&nbsp;&nbsp;{if condition="config('cloud.identifier')"}<a href="{:url('lists')}" style="display:none" id="upgrade" class="layui-btn layui-btn-normal layui-btn-xs">有新版本，请点此升级</a>{else /}<a href="javascript:layer.msg('请先绑定账号！');" style="display:none" id="upgrade" class="mcolor">点此获取升级</a>{/if}</td>
+            <td>当前版本： v{:config('committee.version')}&nbsp;&nbsp;
+                {if condition="config('cloud.identifier')"}
+                    <a href="{:url('lists')}" style="display:none" id="upgrade" class="layui-btn layui-btn-normal layui-btn-xs">有新版本，请点此升级</a>
+                {else /}
+                    <a href="javascript:layer.msg('请先绑定账号！');" style="display:none" id="upgrade" class="mcolor">点此获取升级</a>
+                {/if}
+            </td>
         </tr>
         <tr>
             <td>云平台通信：<span class="layui-btn layui-btn-normal layui-btn-xs" id="connectionStatus">...</span></td>

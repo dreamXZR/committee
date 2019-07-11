@@ -173,9 +173,9 @@ CREATE TABLE `committee_system_module` (
 -- ----------------------------
 -- Records of hisi_system_module
 -- ----------------------------
-INSERT INTO `committee_system_module` VALUES ('1', '1', 'system', '11', '系统管理模块', '系统核心模块，用于后台各项管理功能模块及功能拓展', '', '1.0.0', '0', '1', '', '1489998096', '1489998096', null);
-INSERT INTO `committee_system_module` VALUES ('2', '1', 'index', '11', '默认模块', '推荐使用扩展模块作为默认首页。', '', '1.0.0', '0', '1', '', '1489998096', '1489998096', null);
-INSERT INTO `committee_system_module` VALUES ('3', '1', 'install', '11', '系统安装模块', '系统安装模块，勿动。', '', '1.0.0', '0', '1', '', '1489998096', '1489998096', null);
+INSERT INTO `committee_system_module` VALUES ('1', '1', 'system', 'system', '系统管理模块', '系统核心模块，用于后台各项管理功能模块及功能拓展', '', '1.0.0', '0', '1', '', '1489998096', '1489998096', null);
+INSERT INTO `committee_system_module` VALUES ('2', '1', 'index', 'system', '默认模块', '推荐使用扩展模块作为默认首页。', '', '1.0.0', '0', '1', '', '1489998096', '1489998096', null);
+INSERT INTO `committee_system_module` VALUES ('3', '1', 'install', 'system', '系统安装模块', '系统安装模块，勿动。', '', '1.0.0', '0', '1', '', '1489998096', '1489998096', null);
 
 -- ----------------------------
 -- Table structure for `committee_system_role`

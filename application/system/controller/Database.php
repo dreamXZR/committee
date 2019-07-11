@@ -21,7 +21,7 @@ class Database extends Admin
     {
         parent::initialize();
 
-        $this->backupPath = Env::get('root_path').'backup/';
+        $this->backupPath = Env::get('root_path').'backup/'.trim(config('databases.backup_path'), '/').'/';
 
         $this->tabData['menu']=[
                 [
@@ -116,7 +116,7 @@ class Database extends Admin
     /**
      * 备份数据库
      */
-    public function backup($start = 0)
+    public function export($start = 0)
     {
 
 
@@ -183,6 +183,62 @@ class Database extends Admin
     }
 
     /**
+     * 恢复数据库
+     * @param string $id
+     */
+    public function import($id = '')
+    {
+        if (empty($id)) {
+            return $this->error('请选择您要恢复的备份文件');
+        }
+
+        $name  = date('Ymd-His', $id) . '-*.sql*';
+        $path  = $this->backupPath.$name;
+        $files = glob($path);
+        $list  = array();
+
+        foreach($files as $name){
+            $basename = basename($name);
+            $match    = sscanf($basename, '%4s%2s%2s-%2s%2s%2s-%d');
+            $gz       = preg_match('/^\d{8,8}-\d{6,6}-\d+\.sql.gz$/', $basename);
+            $list[$match[6]] = array($match[6], $name, $gz);
+        }
+
+        ksort($list);
+
+        // 检测文件正确性
+        $last = end($list);
+
+        if(count($list) === $last[0]) {
+
+            foreach ($list as $item) {
+
+                $config = [
+                    'path'     => $this->backupPath,
+                    'compress' => $item[2]
+                ];
+
+                $database = new dbOper($item, $config);
+                $start = $database->import(0);
+
+                // 导入所有数据
+                while (0 !== $start) {
+
+                    if (false === $start) {
+                        return $this->error('数据恢复出错');
+                    }
+
+                    $start = $database->import($start[0]);
+                }
+            }
+
+            return $this->success('数据恢复完成');
+        }
+
+        return $this->error('备份文件可能已经损坏，请检查');
+    }
+
+    /**
      * 优化数据库
      * @param string $id  数据表名
      */
@@ -221,12 +277,18 @@ class Database extends Admin
         return $this->error('数据表修复失败');
     }
 
-    public function backupDel()
+    public function backupDel($id = '')
     {
-        $id=$this->request->param('id/d');
-
         if (empty($id)) {
             return $this->error('请选择您要删除的备份文件');
+        }
+
+        $name  = date('Ymd-His', $id) . '-*.sql*';
+        $path = $this->backupPath.$name;
+        array_map("unlink", glob($path));
+
+        if(count(glob($path)) && glob($path)){
+            return $this->error('备份文件删除失败，请检查权限');
         }
 
         return $this->success('备份文件删除成功');

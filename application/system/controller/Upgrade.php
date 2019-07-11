@@ -30,7 +30,7 @@ class Upgrade extends Admin
         $this->updatePath       = $this->rootPath.'backup/uppack/';
         $this->updateBackPath   = $this->rootPath.'backup/upback/';
         $this->appType          = $this->request->param('app_type/s', 'system');
-        $this->identifier       = $this->request->param('identifier/s', 'system');
+        $this->identifier       = $this->request->param('identifier/s', config('committee.identifier'));
         $this->cloud = new Cloud(config('cloud.identifier'), $this->updatePath);
         $this->cacheUpgradeList = 'upgrade_version_list'.$this->identifier;
 
@@ -154,7 +154,7 @@ class Upgrade extends Admin
         $versions = $this->getVersion();
 
         //检查是否符合升级条件
-        if($this->downloadCheck($versions['data'][$version]) == false){
+        if($this->downloadCheck($versions['data'][$version],$this->appType) == false){
             return $this->error($this->error);
         }
 
@@ -202,14 +202,21 @@ class Upgrade extends Admin
      * 检查是否符合升级要求+ 加锁
      * @param $check条件
      */
-    public function downloadCheck($check)
+    public function downloadCheck($check,$appType='system')
     {
-        $current_frame_version=config('committee.version');
+        switch ($appType){
+            case 'system':
+                break;
+            case 'module':
+                $current_frame_version=config('committee.version');
 
-        if(version_compare($current_frame_version,$check['frame_version'],'<')){
-            $this->error='框架版本必须大于等于'.$check['frame_version'];
-            return false;
+                if(version_compare($current_frame_version,$check['frame_version'],'<')){
+                    $this->error='框架版本必须大于等于'.$check['frame_version'];
+                    return false;
+                }
+                break;
         }
+
 
         //放置锁文件防止重复操作
         $lock = $this->updatePath.$this->identifier.'upgrade.lock';
@@ -287,18 +294,20 @@ class Upgrade extends Admin
         if (!is_dir($this->updateBackPath)) {
             Dir::create($this->updateBackPath);
         }
+
         $decomPath = $this->updatePath.basename($file,".zip");
         if (!is_dir($decomPath)) {
             Dir::create($decomPath, 0777);
         }
+
         // 解压升级包
         $archive = new PclZip();
-        die;
         $archive->PclZip($file);
         if(!$archive->extract(PCLZIP_OPT_PATH, $decomPath, PCLZIP_OPT_REPLACE_NEWER)) {
             $this->error = '升级失败，请开启[/backup/uppack]文件夹权限';
             return false;
         }
+
         // 备份需要升级的旧版本
         $upInfo = include_once $decomPath.'/upgrade.php';
         $backPath = $this->updateBackPath.config('hisiphp.version').'/';
@@ -306,7 +315,9 @@ class Upgrade extends Admin
             Dir::create($backPath, 0777);
         }
         $layout = '';
+
         array_push($upInfo['update'], '/version.php');
+
         //备份旧文件
         foreach ($upInfo['update'] as $k => $v) {
             $v = trim($v, '/');

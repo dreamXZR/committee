@@ -284,7 +284,7 @@ class Module extends Admin
             //删除模块文件
             Dir::delDir($modPath);
             //删除模块静态文件
-            Dir::delDir('/static/'.$module['name']);
+            Dir::delDir(Env::get('route_path').'public/static/'.$module['name'].'/');
             // 删除当前模块菜单
             MenuModel::where('module', $module['name'])->delete();
 

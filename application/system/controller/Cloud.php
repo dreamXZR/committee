@@ -36,32 +36,23 @@ class Cloud extends Admin
 
             $response = $this->cloud->data($param)->type('GET')->api('modules');
             $cloudData=\json_decode($response->getBody()->getContents(),true);
-            //var_dump($cloudData);
 
             if ($cloudData['data']) {
 
-                $locApp = ModuleModel::where('system', 0)->column('identifier,version');
-
-
+                $locApp = ModuleModel::where('system', 0)->column('name');
 
 
                 $apps = [];
-//                foreach ($cloudData['data'] as $k => $v) {
-//                    $v['install'] = 0;
-//                    $v['upgrade'] = 0;
-//                    // 检查是否已有安装某个分支
-//                    foreach ($v['branchs'] as $kk => $vv) {
-//                        if (array_key_exists($kk, $locApp)) {
-//                            $v['install'] = $kk;
-//                            if (version_compare($vv['version'], $locApp[$kk], '>')) {
-//                                $v['upgrade'] = 1;
-//                            }
-//                            continue;
-//                        }
-//                    }
-//                    $apps[] = $v;
-//                }
-                $data['data'] = $cloudData['data'];
+                foreach ($cloudData['data'] as $k => $v) {
+                    $v['install'] = 0;
+                    // 检查是否已有安装某个分支
+                    if(in_array($v['alias'],$locApp)){
+                        $v['install'] = 1;
+                    }
+                    $apps[] = $v;
+                }
+
+                $data['data'] = $apps;
                 $data['count'] = $cloudData['meta']['pagination']['total'];
             }
 
