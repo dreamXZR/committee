@@ -13,6 +13,11 @@ class Pdf extends Admin
 
     private $html;
 
+    /**
+     * @var array
+     */
+    protected $options = array();
+
     public function __construct(App $app = null)
     {
         parent::__construct($app);
@@ -24,6 +29,7 @@ class Pdf extends Admin
     public function loadHtml($html)
     {
         $this->html=$html;
+        $this->file = null;
         return $this;
 
     }
@@ -43,5 +49,19 @@ class Pdf extends Admin
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="'.$filename.'"',
         ));
+    }
+
+    public function save($filename, $overwrite = false)
+    {
+        if ($this->html)
+        {
+            $this->snappy->generateFromHtml($this->html, $filename, $this->options, $overwrite);
+        }
+        elseif ($this->file)
+        {
+            $this->snappy->generate($this->file, $filename, $this->options, $overwrite);
+        }
+
+        return $this;
     }
 }

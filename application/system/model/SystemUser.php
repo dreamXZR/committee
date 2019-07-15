@@ -46,10 +46,10 @@ class SystemUser extends Model
         }
 
         // 检查是否分配角色
-//        if ($user->role_id == 0) {
-//            $this->error = '禁止访问(原因：未分配角色)！';
-//            return false;
-//        }
+        if ($user->role_id == 0) {
+            $this->error = '禁止访问(原因：未分配角色)！';
+            return false;
+        }
 
         // 角色信息
 //        $role = RoleModel::where('id', $user->role_id)->find()->toArray();

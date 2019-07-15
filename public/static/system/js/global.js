@@ -1,4 +1,4 @@
-/***** HisiPHP By http://www.HisiPHP.com *****/
+
 layui.define(['element', 'form', 'table', 'md5'], function(exports) {
     var $ = layui.jquery,element = layui.element, 
         layer = layui.layer, 
@@ -436,6 +436,12 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
         return false;
     });
 
+    /**
+     * 批量导出操作
+     */
+    // $(document).on('click', '.j-page-export', function(){
+    //     var that = $(this),
+    // });
     /**
      * layui非静态table搜索渲染
      * @attr data-table table容器ID
