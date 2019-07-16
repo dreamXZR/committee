@@ -439,9 +439,128 @@ layui.define(['element', 'form', 'table', 'md5'], function(exports) {
     /**
      * 批量导出操作
      */
-    // $(document).on('click', '.j-page-export', function(){
-    //     var that = $(this),
-    // });
+    $(document).on('click', '.j-page-export', function(){
+        var that = $(this),
+            query = '',
+            code = function(that) {
+                var href = that.attr('data-href');
+                var cancel_href = that.attr('cancel-href');
+                if (!href || !cancel_href) {
+                    layer.msg('请设置data-href和cancel_href参数');
+                    return false;
+                }
+                var tableObj = that.attr('data-table') ? that.attr('data-table') : 'dataTable';
+                var checkStatus = table.checkStatus(tableObj);
+                if (checkStatus.data.length <= 0) {
+                    layer.msg('请选择要导出的数据');
+                    return false;
+                }
+                var ids=[];
+                for (var i in checkStatus.data) {
+                    ids.push(checkStatus.data[i].id);
+                }
+
+                var all_number=ids.length;
+                var times=parseInt(all_number/10)+1;
+                var percent_once=parseInt(100/times);
+                layer.open({
+                    title:'数据导出',
+                    content:$('#export_progress').html(),
+                    btn: ['取消导出']
+                    ,closeBtn: 0
+                    ,yes: function(index, layero){
+                        $.ajax({
+                            url:cancel_href,
+                            method:'POST',
+                            success:function () {
+                                layer.close(index);
+                                window.location.reload();
+                            }
+                        });
+                    }
+                    ,success: function(layero, index){
+                        element.render('progress');
+                        for(var i=0;i<times;i++){
+                            var flag=false;
+
+                            //是否为最后一次
+                            if(i === times-1){
+                                flag=true;
+                            }
+                            $.ajax({
+                                url:href,
+                                method:'POST',
+                                data:{
+                                    ids:ids.slice(i*10,(i+1)*10).join(','),
+                                    flag:flag
+                                },
+                                success:function (res) {
+                                    if(res.code === 1){
+                                        $('#percent_number').attr('lay-percent',percent_once*i+'%');
+                                        element.render('progress');
+                                        if(res.data.path){
+                                            setTimeout(function () {
+                                                layer.close(index);
+                                                layer.open({
+                                                    title:'数据导出',
+                                                    content:"已生成zip,请点击下载<br/><a style='color: green;' href='"+res.data.path+"'>下载</a>",
+                                                    btn: ['取消'],
+                                                    closeBtn: 0,
+                                                    yes: function(index, layero){
+                                                        $.ajax({
+                                                            url:cancel_href,
+                                                            method:'POST',
+                                                            success:function () {
+                                                                layer.close(index);
+                                                                window.location.reload();
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            },1000);
+
+                                        }
+                                    }else{
+                                        layer.close(index);
+                                        layer.open({
+                                            title:'数据导出',
+                                            content:'导出出现错误,请重新尝试',
+                                            btn: ['确定'],
+                                            closeBtn: 0,
+                                            yes: function(index, layero){
+                                                $.ajax({
+                                                    url:cancel_href,
+                                                    method:'POST',
+                                                    success:function () {
+                                                        layer.close(index);
+                                                        window.location.reload();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+
+                                }
+
+                            });
+                        }
+
+                    }
+
+                });
+            };
+
+        if (that.hasClass('confirm')) {
+            var tips = that.attr('tips') ? that.attr('tips') : '您确定要执行此操作吗？';
+            layer.confirm(tips, {title:false, closeBtn:0}, function(index){
+                code(that);
+                layer.close(index);
+            });
+        } else {
+            code(that);
+        }
+        return false;
+    });
     /**
      * layui非静态table搜索渲染
      * @attr data-table table容器ID

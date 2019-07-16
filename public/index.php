@@ -12,6 +12,7 @@
 // [ 应用入口文件 ]
 namespace think;
 
+
 header('Content-Type:text/html;charset=utf-8');
 
 // 检测PHP环境

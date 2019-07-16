@@ -2,12 +2,13 @@
 
 namespace app\system\controller;
 
+use app\common\controller\Common;
 use think\App;
 use Knp\Snappy\Pdf as SnappyPDF;
 use think\Response;
 use Env;
 
-class Pdf extends Admin
+class Pdf extends Common
 {
     private $snappy;
 

@@ -2,10 +2,11 @@
 
 namespace app\system\controller;
 
+use app\common\controller\Common;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class Excel extends Admin
+class Excel extends Common
 {
     /**
      * excel表的表名

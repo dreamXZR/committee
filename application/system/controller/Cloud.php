@@ -89,7 +89,7 @@ class Cloud extends Admin
         }
 
         // 解压安装包
-        $archive = new PclZip();
+        $archive = new PclZip('');
         $archive->PclZip($file);
         if(!$archive->extract(PCLZIP_OPT_PATH, $unzipPath, PCLZIP_OPT_REPLACE_NEWER)) {
             return $this->error('安装失败（安装包可能已损坏）');
