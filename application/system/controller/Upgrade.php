@@ -30,7 +30,7 @@ class Upgrade extends Admin
         $this->updatePath       = $this->rootPath.'backup/uppack/';
         $this->updateBackPath   = $this->rootPath.'backup/upback/';
         $this->appType          = $this->request->param('app_type/s', 'system');
-        $this->identifier       = $this->request->param('identifier/s', config('committee.identifier'));
+        $this->identifier       = $this->request->param('identifier/s', 'system');
         $this->cloud = new Cloud(config('cloud.identifier'), $this->updatePath);
         $this->cacheUpgradeList = 'upgrade_version_list'.$this->identifier;
 
@@ -66,8 +66,7 @@ class Upgrade extends Admin
                 'password' => $this->request->post('password/s')
             ];
 
-            $response=$this->cloud->data($data)->type('POST')->api('bind');
-            $res_data=\json_decode($response->getBody()->getContents(),true);
+            $res_data=$this->cloud->data($data)->type('POST')->api('bind');
 
             if(isset($res_data['code']) && $res_data['code'] == 1){
                 $file = $this->rootPath.'config/cloud.php';
@@ -123,17 +122,18 @@ class Upgrade extends Admin
     {
         $cache = cache($this->cacheUpgradeList);
 
-        if(isset($cache['data']) && !empty($cache['data'])){
+        if(!config('sys.app_debug') && isset($cache['data']) && !empty($cache['data'])){
             return $cache;
         }
 
-        $response=$this->cloud->data([
+        $cloudData=$this->cloud->data([
             'version' => $this->appVersion,
             'app_identifier' => $this->identifier,
             'app_type' => $this->appType
         ])->type('GET')->api('getVersions');
 
-        $cloudData=\json_decode($response->getBody()->getContents(),true);
+        cache($this->cacheUpgradeList,$cloudData,3600);
+
         return $cloudData;
     }
 
@@ -250,12 +250,6 @@ class Upgrade extends Admin
             return $this->error($this->error);
         }
 
-        $moduleInfo = include $this->appPath.$this->module_name.'/info.php';
-
-        ModuleModel::where('identifier', $this->identifier)->setField([
-            'version'=>$version,
-            'identifier'=>$moduleInfo['identifier']
-        ]);
 
         return $this->success('升级包安装成功');
     }
@@ -301,7 +295,7 @@ class Upgrade extends Admin
         }
 
         // 解压升级包
-        $archive = new PclZip();
+        $archive = new PclZip($decomPath);
         $archive->PclZip($file);
         if(!$archive->extract(PCLZIP_OPT_PATH, $decomPath, PCLZIP_OPT_REPLACE_NEWER)) {
             $this->error = '升级失败，请开启[/backup/uppack]文件夹权限';
@@ -387,7 +381,7 @@ class Upgrade extends Admin
         }
 
         // 解压升级包
-        $archive = new PclZip();
+        $archive = new PclZip($decomPath);
         $archive->PclZip($file);
         if(!$archive->extract(PCLZIP_OPT_PATH, $decomPath, PCLZIP_OPT_REPLACE_NEWER)) {
             $this->error = '升级失败，请开启[/backup/uppack]文件夹权限';
@@ -473,9 +467,7 @@ class Upgrade extends Admin
 
         // 更新模块版本信息
         ModuleModel::where('identifier', $this->identifier)->setField('version', $version);
-
         $this->clearCache('', $version,$dir_uppack_stauts);
-        //$this->identifier=$moduleInfo['identifier'];
         return true;
     }
 

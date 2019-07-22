@@ -4,7 +4,7 @@ return [
   [
     'name' => 'committee',
     'version' => '1.0.0',
-    'identifier'=>'system.001000000',
+    'identifier'=>'system',
     'release' => 0,
     'copyright' => '',
   ],

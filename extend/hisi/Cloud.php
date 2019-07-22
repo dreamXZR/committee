@@ -85,7 +85,7 @@ class Cloud {
         $response = $this->client->request($this->type, $api,[
             'query'=>$this->data
         ]);
-        return $response;
+        return self::_response($response);
     }
 
     /**
@@ -158,20 +158,9 @@ class Cloud {
      * 以数组格式返回
      * @return array
      */
-    private function _response($result = [])
+    private static function _response($response)
     {
 
-        if (is_file($this->lock)) {
-            @unlink($this->lock);
-        }
-        
-        if (!$result || isset($result['errno'])) {
-            if (isset($result['msg'])) {
-                return ['code' => 0, 'msg' => $result['msg']];
-            }
-            return ['code' => 0, 'msg' => '请求的接口网络异常，请稍后在试'];
-        } else {
-            return json_decode($result, 1);
-        }
+        return \json_decode($response->getBody()->getContents(),true);
     }
 }

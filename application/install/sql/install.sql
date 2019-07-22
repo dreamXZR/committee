@@ -27,7 +27,7 @@ CREATE TABLE `committee_system_config` (
 -- ----------------------------
 -- Records of hisi_system_config
 -- ----------------------------
-INSERT INTO `committee_system_config` VALUES ('1', '1', 'upload', '图片上传张数限制', 'upload_image_size', '5', 'input', '', '', '', '1', '1', '1490841797', '1490841797');
+INSERT INTO `committee_system_config` VALUES ('1', '1', 'upload', '图片上传张数限制', 'upload_image_number', '5', 'input', '', '', '', '1', '1', '1490841797', '1490841797');
 INSERT INTO `committee_system_config` VALUES ('2', '1', 'upload', '图片上传大小限制', 'upload_image_size', '0', 'input', '', '', '单位：KB，0表示不限制大小', '3', '1', '1490841797', '1491040778');
 INSERT INTO `committee_system_config` VALUES ('3', '1', 'upload', '允许上传图片格式', 'upload_image_ext', 'jpg,png,gif,jpeg', 'input', '', '', '多个格式请用英文逗号（,）隔开', '4', '1', '1490842130', '1491040778');
 INSERT INTO `committee_system_config` VALUES ('4', '1', 'sys', '开发模式', 'app_debug', '1', 'switch', '0:关闭\r\n1:开启', '', '&lt;strong class=&quot;red&quot;&gt;生产环境下一定要关闭此配置&lt;/strong&gt;', '3', '1', '1491005004', '1492093874');

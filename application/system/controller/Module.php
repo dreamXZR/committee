@@ -5,9 +5,8 @@ namespace app\system\controller;
 use app\system\model\SystemModule as ModuleModel;
 use app\system\model\SystemMenu as MenuModel;
 use hisi\Dir;
-use hisi\PclZip;
+use hisi\Cloud as cloudApp;
 use think\Db;
-use think\Xml;
 use Env;
 
 /**
@@ -36,7 +35,8 @@ class Module extends Admin
 
 
         ];
-
+        $this->tempPath = Env::get('runtime_path').'app/';
+        $this->cloud    = new cloudApp(config('cloud.identifier'), $this->tempPath);
         $this->appPath = Env::get('app_path');
     }
 
@@ -56,6 +56,27 @@ class Module extends Admin
         $modules=ModuleModel::where($map)->order('sort,id')
                                          ->column('id,title,intro,icon,system,name,version,status,identifier');
 
+        try{
+            $cloudData = $this->cloud->type('GET')->api('modules');
+        }catch (\Exception $e){
+            $cloudData=[];
+        }
+
+
+
+        foreach ($modules as $k=>$v){
+            $modules[$k]['upgrade'] = 0;
+            if($cloudData){
+                foreach ($cloudData['data'] as $kk=>$vv){
+                    if($v['name']==$vv['alias']){
+                        if(version_compare($v['version'],$vv['last_branch']['version'],'<')){
+                            $modules[$k]['upgrade'] = 1;
+                        }
+                    }
+                }
+            }
+
+        }
 
         $this->assign('emptyTips','<tr><td colspan="5" align="center" height="100">未发现相关模块</td></tr>');
         $this->assign('module_list',array_values($modules));

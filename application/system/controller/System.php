@@ -62,7 +62,7 @@ class System extends Admin
                     return $this->error('保存失败');
                 }
                 ModuleModel::getConfig('', true);
-                return $this->success('保存成功','system/index');
+                return $this->success('保存成功');
             }
 
             // 系统模块配置保存
@@ -104,11 +104,11 @@ class System extends Admin
                     unlink($rootPath.'.env');
                 }
                 $env = "//设置开启调试模式\napp_debug = " . ($config['sys']['app_debug'] ? 'true' : 'false');
-                $env .= "\n//应用Trace\napp_trace = " . ($config['sys']['app_trace'] ? 'true' : 'false');
+//                $env .= "\n//应用Trace\napp_trace = " . ($config['sys']['app_trace'] ? 'true' : 'false');
                 file_put_contents($rootPath.'.env', $env);
             }
 
-            return $this->success('保存成功', ROOT_DIR.$adminPath.'/system/system/index/group/'.$group.'.html');
+            return $this->success('保存成功');
         }
         $tabData = [];
         //获取导航栏

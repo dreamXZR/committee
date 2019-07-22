@@ -34,8 +34,7 @@ class Cloud extends Admin
             $data['code'] = 0;
             $data['data'] = [];
 
-            $response = $this->cloud->data($param)->type('GET')->api('modules');
-            $cloudData=\json_decode($response->getBody()->getContents(),true);
+            $cloudData = $this->cloud->data($param)->type('GET')->api('modules');
 
             if ($cloudData['data']) {
 

@@ -28,7 +28,12 @@
                         </div>
                     </div>
                 </td>
-                <td>{$vo['version']}</td>
+                <td>
+                    {$vo['version']}
+                    {if $vo['upgrade'] == 1}
+                    (有新版本)
+                    {/if}
+                </td>
 
 
                 <td>

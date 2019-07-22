@@ -54,9 +54,11 @@
     {:token()}
     <input type="submit" value="登录" lay-submit="" lay-filter="formLogin" class="layui-btn layui-btn-normal">
     </form>
+    <div class="copyright">
+        {:config('base.site_icp')}
+    </div>
 
 </div>
-<div>{:config('base.site_icp')}</div>
 </div>
 
 {include file="block/layui" /}

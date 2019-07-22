@@ -257,7 +257,7 @@ class User extends Admin
         $this->assign('menu_list', MenuModel::getAllChild());
         $this->assign('tabData', $tabData);
         $this->assign('tabType', 2);
-        return $this->fetch();
+        return $this->fetch('roleform');
     }
 
     /**
@@ -273,5 +273,52 @@ class User extends Admin
             return $this->success('删除成功');
         }
         return $this->error($model->getError());
+    }
+
+    /**
+     * 修改角色
+     * @return mixed
+     */
+    public function editRole($id = 0)
+    {
+        if ($id <= 1) {
+            return $this->error('禁止编辑');
+        }
+
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            // 当前登陆用户不可更改自己的分组角色
+            if (ADMIN_ROLE == $data['id']) {
+                return $this->error('禁止修改当前角色(原因：您不是超级管理员)');
+            }
+
+            // 验证
+            $result = $this->validate($data, 'SystemRole');
+            if($result !== true) {
+                return $this->error($result);
+            }
+            if (!RoleModel::update($data)) {
+                return $this->error('修改失败');
+            }
+
+            // 更新权限缓存
+            cache('role_auth_'.$data['id'], $data['auth']);
+
+            return $this->success('修改成功');
+        }
+        $tabData = [];
+        $tabData['menu'] = [
+            ['title' => '修改角色'],
+            ['title' => '设置权限'],
+        ];
+        $row = RoleModel::where('id', $id)->field('id,name,intro,auth,status')->find()->toArray();
+
+        //$row['auth'] = json_decode($row['auth']);
+
+        $this->assign('formData', $row);
+        $this->assign('menu_list', MenuModel::getAllChild());
+        $this->assign('tabData', $tabData);
+        $this->assign('tabType', 2);
+        return $this->fetch('roleform');
     }
 }

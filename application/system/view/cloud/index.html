@@ -91,7 +91,7 @@
         //table数据
         table.render({
             elem: '#dataTable'
-            ,url: '{:url('', input('get.'))}'
+            ,url: "{:url('')}"
             ,page: true
             ,toolbar: '#toolbar'
             ,defaultToolbar: []
@@ -99,6 +99,9 @@
             ,cols: [[
                 {field:'module_name', width:180, title: '模块名称'}
                 ,{field:'intro', title: '模块简介'}
+                ,{field:'version', title: '模块版本',templet:function (d) {
+                    return d.last_branch.version;
+                }}
                 ,{width:160, title: ( identifier ? '<a href="javascript:void(0);" class="layui-btn layui-btn-xs layui-btn-normal j-bind-cloud">重新绑定</a>' : ''), templet: '#buttonTpl'}
             ]]
             ,done:function(res, curr, count) {
